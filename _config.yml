@@ -1,0 +1,9 @@
+# Site settings
+title: USB104 A7 Notes
+description: Notes on the USB104 A7 development board
+baseurl: /usb104-a7-notes
+url: https://pavel-demin.github.io
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
