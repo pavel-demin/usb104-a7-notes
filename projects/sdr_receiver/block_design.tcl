@@ -43,8 +43,6 @@ cell xilinx.com:ip:proc_sys_reset rst_0 {} {
 # Create usb_hub
 cell pavel-demin:user:usb_hub hub_0 {
   CFG_DATA_WIDTH 160
-  AXIS_TDATA_WIDTH 64
-  WRITE_DEPTH 4096
 } {
   usb_clk usb_clk_i
   usb_empty usb_rxfn_i
