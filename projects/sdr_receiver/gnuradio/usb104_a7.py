@@ -56,17 +56,16 @@ class source(gr.sync_block):
 
     def work(self, input_items, output_items):
         out = output_items[0]
+        view = out.view(np.uint8)
         offset = 0
-        limit = 8 * len(out)
-        buffer = bytearray(limit)
+        limit = view.size
         while offset < limit:
-            size = limit - offset
-            data = self.device.read_data(size)
-            size = len(data)
-            buffer[offset : offset + size] = data
+            data = self.device.read_data(limit - offset)
+            data = np.frombuffer(data, np.uint8)
+            size = data.size
+            view[offset : offset + size] = data
             offset += size
-        out[:] = np.frombuffer(buffer, np.complex64)
-        return len(out)
+        return out.size
 
     def send_command(self, addr, value):
         command = np.uint64((addr << 32) + value)
