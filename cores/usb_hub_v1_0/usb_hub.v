@@ -1,4 +1,7 @@
-module usb_fifo #
+
+`timescale 1 ns / 1 ps
+
+module usb_hub #
 (
   parameter integer CFG_DATA_WIDTH = 32
 )
