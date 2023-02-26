@@ -1,4 +1,7 @@
-# clock input
+set_property CONFIG_VOLTAGE 3.3 [current_design]
+set_property CFGBVS VCCO [current_design]
+
+#### clock input
 
 set_property IOSTANDARD LVCMOS33 [get_ports clk_i]
 set_property PACKAGE_PIN E3 [get_ports clk_i]
