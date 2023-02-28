@@ -7,9 +7,10 @@
 NAME = led_blinker
 PART = xc7a100tcsg324-1
 
-CORES = axis_constant_v1_0 axis_fifo_v2_0 axis_hub_v1_0 axis_spi_v1_0 \
-  axis_usb_v1_0 axis_variable_v1_0 axis_zmod_adc_v1_0 cdce_gpio_v1_0 \
-  cdce_iic_v1_0 dsp48_v1_0 port_selector_v1_0 port_slicer_v1_0 usb_hub_v1_0
+CORES = axis_constant_v1_0 axis_counter_v1_0 axis_fifo_v2_0 axis_hub_v1_0 \
+  axis_spi_v1_0 axis_usb_v1_0 axis_variable_v1_0 axis_zmod_adc_v1_0 \
+  cdce_gpio_v1_0 cdce_iic_v1_0 dsp48_v1_0 port_selector_v1_0 port_slicer_v1_0 \
+  usb_hub_v1_0
 
 VIVADO = vivado -nolog -nojournal -mode batch
 RM = rm -rf
