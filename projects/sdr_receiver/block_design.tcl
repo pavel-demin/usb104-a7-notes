@@ -38,12 +38,10 @@ cell xilinx.com:ip:proc_sys_reset rst_0 {} {
   slowest_sync_clk pll_0/clk_out1
 }
 
-# HUB
+# USB
 
-# Create usb_hub
-cell pavel-demin:user:usb_hub hub_0 {
-  CFG_DATA_WIDTH 160
-} {
+# Create axis_usb
+cell pavel-demin:user:axis_usb usb_0 {} {
   usb_clk usb_clk_i
   usb_empty usb_rxfn_i
   usb_full usb_txen_i
@@ -52,7 +50,7 @@ cell pavel-demin:user:usb_hub hub_0 {
   usb_oen usb_oen_o
   usb_siwun usb_siwun_o
   usb_data usb_data_tri_io
-  aclk /pll_0/clk_out1
+  aclk pll_0/clk_out1
 }
 
 # ADC
@@ -69,6 +67,9 @@ cell pavel-demin:user:axis_zmod_adc adc_0 {
 
 module rx_0 {
   source projects/sdr_receiver/rx.tcl
+} {
+  hub_0/S_AXIS usb_0/M_AXIS
+  hub_0/M_AXIS usb_0/S_AXIS
 }
 
 # ADC SPI
@@ -79,7 +80,7 @@ cell pavel-demin:user:axis_fifo fifo_0 {
   M_AXIS_TDATA_WIDTH 32
   WRITE_DEPTH 1024
 } {
-  S_AXIS hub_0/M_AXIS
+  S_AXIS rx_0/hub_0/M00_AXIS
   aclk pll_0/clk_out1
   aresetn rst_0/peripheral_aresetn
 }

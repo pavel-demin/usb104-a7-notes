@@ -1,29 +1,38 @@
+# Create axi_hub
+cell pavel-demin:user:axis_hub hub_0 {
+  CFG_DATA_WIDTH 160
+  STS_DATA_WIDTH 32
+} {
+  aclk /pll_0/clk_out1
+  aresetn /rst_0/peripheral_aresetn
+}
+
 # Create port_slicer
 cell pavel-demin:user:port_slicer slice_0 {
   DIN_WIDTH 160 DIN_FROM 0 DIN_TO 0
 } {
-  din /hub_0/cfg_data
+  din hub_0/cfg_data
 }
 
 # Create port_slicer
 cell pavel-demin:user:port_slicer slice_1 {
   DIN_WIDTH 160 DIN_FROM 32 DIN_TO 32
 } {
-  din /hub_0/cfg_data
+  din hub_0/cfg_data
 }
 
 # Create port_slicer
 cell pavel-demin:user:port_slicer slice_2 {
   DIN_WIDTH 160 DIN_FROM 79 DIN_TO 64
 } {
-  din /hub_0/cfg_data
+  din hub_0/cfg_data
 }
 
 # Create port_slicer
 cell pavel-demin:user:port_slicer slice_3 {
   DIN_WIDTH 160 DIN_FROM 135 DIN_TO 96
 } {
-  din /hub_0/cfg_data
+  din hub_0/cfg_data
 }
 
 # Create port_selector
@@ -207,11 +216,12 @@ cell xilinx.com:ip:axis_dwidth_converter conv_1 {
 cell pavel-demin:user:axis_fifo fifo_0 {
   S_AXIS_TDATA_WIDTH 64
   M_AXIS_TDATA_WIDTH 32
-  WRITE_DEPTH 4096
+  WRITE_DEPTH 8192
   ALWAYS_READY TRUE
 } {
   S_AXIS conv_1/M_AXIS
-  M_AXIS /hub_0/S_AXIS
+  M_AXIS hub_0/S00_AXIS
+  read_count hub_0/sts_data
   aclk /pll_0/clk_out1
   aresetn slice_0/dout
 }
