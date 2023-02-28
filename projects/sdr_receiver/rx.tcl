@@ -1,4 +1,4 @@
-# Create axi_hub
+# Create axis_hub
 cell pavel-demin:user:axis_hub hub_0 {
   CFG_DATA_WIDTH 160
   STS_DATA_WIDTH 32

@@ -55,7 +55,7 @@ cell pavel-demin:user:axis_usb usb_0 {} {
 
 # ADC
 
-# Create axis_zmod_dac
+# Create axis_zmod_adc
 cell pavel-demin:user:axis_zmod_adc adc_0 {
   ADC_DATA_WIDTH 14
 } {
