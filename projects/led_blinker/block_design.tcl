@@ -13,23 +13,6 @@ cell xilinx.com:ip:clk_wiz pll_0 {
   clk_in1 adc_dco_i
 }
 
-# LED
-
-# Create c_counter_binary
-cell xilinx.com:ip:c_counter_binary cntr_0 {
-  Output_Width 32
-} {
-  CLK pll_0/clk_out1
-}
-
-# Create xlslice
-cell xilinx.com:ip:xlslice slice_0 {
-  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26 DOUT_WIDTH 1
-} {
-  Din cntr_0/Q
-  Dout led_o
-}
-
 # CDCE IIC
 
 # Create cdce_iic
@@ -47,4 +30,21 @@ cell pavel-demin:user:cdce_iic iic_0 {
 cell pavel-demin:user:cdce_gpio gpio_0 {} {
   gpio cdce_gpio_tri_io
   aclk clk_i
+}
+
+# LED
+
+# Create c_counter_binary
+cell xilinx.com:ip:c_counter_binary cntr_0 {
+  OUTPUT_WIDTH 32
+} {
+  CLK pll_0/clk_out1
+}
+
+# Create port_slicer
+cell pavel-demin:user:port_slicer slice_0 {
+  DIN_WIDTH 32 DIN_FROM 26 DIN_TO 26
+} {
+  din cntr_0/Q
+  dout led_o
 }
