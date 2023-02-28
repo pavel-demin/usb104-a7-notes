@@ -2,7 +2,7 @@ from gnuradio import gr
 
 import numpy as np
 
-from pyhubio import IO
+from pyhubio import PyhubIO
 
 import time
 
@@ -34,7 +34,7 @@ class source(gr.sync_block):
         gr.sync_block.__init__(
             self, name="usb104_a7_source", in_sig=None, out_sig=[np.complex64]
         )
-        self.io = IO()
+        self.io = PyhubIO()
         self.io.flush()
         self.io.write(np.uint32(source.adc_cfg), 2)
         self.config = np.zeros(4, np.uint32)
