@@ -40,13 +40,13 @@ Getting started with GNU Radio
 
  - Connect an antenna to the CH1 connector of the Zmod Digitizer module.
  - Connect the USB104 A7 board to a USB port.
- - Install [GNU Radio](http://gnuradio.org) and [libusb](https://libusb.info/):
+ - Install [GNU Radio](http://gnuradio.org) and [python3-libusb1](https://github.com/vpelletier/python-libusb1):
 {% highlight bash %}
-sudo apt-get install gnuradio libusb-1.0-0
+sudo apt-get install gnuradio python3-usb1
 {% endhighlight %}
- - Install [pyftdi](https://github.com/eblot/pyftdi):
+ - Install [pyhubio](https://github.com/pavel-demin/pyhubio):
 {% highlight bash %}
-pip install pyftdi
+pip install https://github.com/pavel-demin/pyhubio/archive/master.zip
 {% endhighlight %}
  - Clone the source code repository:
 {% highlight bash %}
