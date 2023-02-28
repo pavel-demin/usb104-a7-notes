@@ -13,7 +13,7 @@ All applications in this repository have a structure similar to the one shown in
 
 To control, monitor and communicate with all parts of the applications, the following items are required:
 
- - control registers
+ - configuration registers
  - status registers
  - AXI4-Stream ports
  - BRAM ports
