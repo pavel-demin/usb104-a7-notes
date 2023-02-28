@@ -20,24 +20,33 @@ module axis_usb
 
   reg [8:0] int_byte_cntr_reg = 9'd0;
   reg [4:0] int_idle_cntr_reg = 5'd0;
-  reg int_rx_ready_reg = 1'b0;
+  reg int_rx_oe_reg = 1'b0;
 
   wire [7:0] int_tx_data_wire;
-  wire [31:0] int_rx_data_wire;
+
+  wire [31:0] int_mdata_wire;
+  wire int_mready_wire;
 
   wire int_tx_full_wire, int_tx_empty_wire;
+  wire int_tx_valid_wire, int_tx_ready_wire;
+  wire int_tx_rd_wire, int_tx_si_wire;
+
   wire int_rx_full_wire, int_rx_empty_wire;
-  wire int_rx_ready_wire, int_tx_ready_wire;
-  wire int_rx_wr_wire, int_tx_rd_wire;
-  wire int_rx_rd_wire, int_tx_si_wire;
+  wire int_rx_valid_wire, int_rx_ready_wire;
+  wire int_rx_rd_wire, int_rx_oe_wire;
 
-  assign int_rx_ready_wire = ~usb_empty & ~int_rx_full_wire & ~int_tx_si_wire;
-  assign int_tx_ready_wire = ~usb_full & ~int_tx_empty_wire & ~int_tx_si_wire & ~int_rx_ready_wire;
+  assign int_rx_valid_wire = ~usb_empty & int_rx_oe_reg;
+  assign int_rx_ready_wire = ~int_rx_full_wire;
 
-  assign int_rx_wr_wire = int_rx_ready_wire & int_rx_ready_reg;
-  assign int_tx_rd_wire = int_tx_ready_wire & ~int_rx_ready_reg;
+  assign int_rx_rd_wire = int_rx_valid_wire & int_rx_ready_wire;
 
-  assign int_tx_si_wire = &int_idle_cntr_reg;
+  assign int_tx_valid_wire = ~int_tx_empty_wire & ~int_rx_oe_reg;
+  assign int_tx_ready_wire = ~usb_full;
+
+  assign int_tx_rd_wire = int_tx_valid_wire & int_tx_ready_wire;
+
+  assign int_rx_oe_wire = ~usb_empty & int_rx_ready_wire;
+  assign int_tx_si_wire = &int_idle_cntr_reg & ~int_tx_valid_wire;
 
   xpm_fifo_async #(
     .WRITE_DATA_WIDTH(32),
@@ -79,19 +88,19 @@ module axis_usb
     .full(int_rx_full_wire),
 
     .wr_clk(usb_clk),
-    .wr_en(int_rx_wr_wire),
+    .wr_en(int_rx_valid_wire),
     .din(usb_data),
 
     .rd_clk(aclk),
-    .rd_en(int_rx_rd_wire),
-    .dout(int_rx_data_wire)
+    .rd_en(int_mready_wire),
+    .dout(int_mdata_wire)
   );
 
   inout_buffer #(
     .DATA_WIDTH(32)
   ) buf_0 (
     .aclk(aclk), .aresetn(1'b1),
-    .in_data(int_rx_data_wire), .in_valid(~int_rx_empty_wire), .in_ready(int_rx_rd_wire),
+    .in_data(int_mdata_wire), .in_valid(~int_rx_empty_wire), .in_ready(int_mready_wire),
     .out_data(m_axis_tdata), .out_valid(m_axis_tvalid), .out_ready(m_axis_tready)
   );
 
@@ -99,11 +108,11 @@ module axis_usb
   begin
     // respect 1 clock cycle delay between output activation
     // and rx data transfer operations
-    int_rx_ready_reg <= int_rx_ready_wire;
+    int_rx_oe_reg <= int_rx_oe_wire;
 
     // assert send immediately if buffer contains unsent data
     // and fifo_tx stays empty for more than 30 clock cycles
-    if(usb_full | int_tx_si_wire)
+    if(int_byte_cntr_reg == 9'd510 | usb_full | int_tx_si_wire)
     begin
       int_byte_cntr_reg <= 9'd0;
       int_idle_cntr_reg <= 5'd0;
@@ -113,7 +122,7 @@ module axis_usb
       int_byte_cntr_reg <= int_byte_cntr_reg + 1'b1;
       int_idle_cntr_reg <= 5'd0;
     end
-    else if(|int_byte_cntr_reg & int_tx_empty_wire & ~int_rx_ready_wire)
+    else if(|int_byte_cntr_reg & int_tx_empty_wire)
     begin
       int_idle_cntr_reg <= int_idle_cntr_reg + 1'b1;
     end
@@ -121,10 +130,10 @@ module axis_usb
 
   assign s_axis_tready = ~int_tx_full_wire;
 
-  assign usb_rdn = ~int_rx_wr_wire;
-  assign usb_wrn = ~int_tx_rd_wire;
-  assign usb_oen = ~int_rx_ready_wire;
+  assign usb_rdn = ~int_rx_rd_wire;
+  assign usb_wrn = ~int_tx_valid_wire;
+  assign usb_oen = ~int_rx_oe_wire;
   assign usb_siwun = ~int_tx_si_wire;
-  assign usb_data = int_tx_rd_wire ? int_tx_data_wire : {(8){1'bz}};
+  assign usb_data = int_tx_valid_wire ? int_tx_data_wire : {(8){1'bz}};
 
 endmodule
