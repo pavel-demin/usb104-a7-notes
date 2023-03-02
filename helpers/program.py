@@ -9,5 +9,5 @@ if len(sys.argv) != 2:
 jtag = PyhubJTAG()
 jtag.flush()
 jtag.setup()
-jtag.reset()
+jtag.idle()
 jtag.program(sys.argv[1])
