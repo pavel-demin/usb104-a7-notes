@@ -1,0 +1,270 @@
+#!/usr/bin/env python3
+
+import sys
+import time
+
+from functools import partial
+
+import numpy as np
+
+from pyhubio import PyhubIO, PyhubJTAG
+
+from PySide2.QtUiTools import loadUiType
+from PySide2.QtCore import Qt, QTimer
+from PySide2.QtWidgets import QApplication, QMainWindow, QLabel, QComboBox
+from PySide2.QtNetwork import QUdpSocket, QHostAddress
+
+Ui_Server, QMainWindow = loadUiType("sdr-receiver-hpsdr.ui")
+
+
+class Server(QMainWindow, Ui_Server):
+    bitstream = "sdr_receiver_hpsdr.bit"
+    # fmt: off
+    reply = [0xef, 0xfe, 0x02, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x19, 0x01, 0x52, 0x5f, 0x50, 0x49, 0x54, 0x41, 0x59, 0x41, 0x08]
+    # fmt: on
+    header = [
+        [127, 127, 127, 0, 0, 33, 17, 25],
+        [127, 127, 127, 8, 0, 0, 0, 0],
+        [127, 127, 127, 16, 0, 0, 0, 0],
+        [127, 127, 127, 24, 0, 0, 0, 0],
+        [127, 127, 127, 32, 66, 66, 66, 66],
+    ]
+    rates = [1280, 640, 320, 160]
+    adc_cfg = [
+        0x00003C,
+        0x000803,
+        0x000800,
+        0x000502,
+        0x001421,
+        0x000501,
+        0x001431,
+    ]
+
+    def __init__(self):
+        super(Server, self).__init__()
+        self.setupUi(self)
+        # initialize variables
+        self.idle = True
+        self.reply = np.zeros(60, np.uint8)
+        self.reply[0:20] = Server.reply
+        self.samples = np.zeros(48 * 4096, np.uint8)
+        self.buffer = np.zeros(1032, np.uint8)
+        self.buffer.view(np.uint32)[0:4] = 0x0601FEEF
+        self.counter = np.zeros(4, np.uint8)
+        self.addr = QHostAddress.Null
+        self.port = 0
+        self.active = 0
+        self.offset = 0
+        self.receivers = 0
+        self.config = np.zeros(10, np.uint32)
+        self.status = np.zeros(1, np.uint32)
+        self.config[1] = 2560
+        # create controls
+        self.startButton.clicked.connect(self.start)
+        self.inputValue = {}
+        for i in range(8):
+            label = QLabel("RX%d input" % (i + 1))
+            self.inputLayout.addWidget(label, i * 2 + 0, 0)
+            input = QComboBox()
+            input.addItems(["CH1", "CH2"])
+            input.currentIndexChanged.connect(partial(self.input_changed, i))
+            self.inputLayout.addWidget(input, i * 2 + 1, 0)
+        # create IO
+        self.jtag = PyhubJTAG()
+        self.io = PyhubIO()
+        # create UDP socket
+        self.socket = QUdpSocket(self)
+        self.socket.bind(1024)
+        # create timers
+        self.ep6_timer = QTimer(self)
+        self.ep6_timer.timeout.connect(self.ep6)
+        self.cfg_timer = QTimer(self)
+        self.cfg_timer.timeout.connect(self.cfg)
+
+    def start(self):
+        if self.idle:
+            self.startButton.setEnabled(False)
+            try:
+                self.jtag.start()
+                self.jtag.flush()
+                self.jtag.setup()
+                self.jtag.idle()
+                self.jtag.program(Server.bitstream)
+            except:
+                self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+                self.startButton.setEnabled(True)
+                return
+            self.logViewer.appendPlainText("FPGA configured")
+            time.sleep(0.1)
+            try:
+                self.io.start()
+                self.io.flush()
+                self.io.write(np.uint32(Server.adc_cfg), 2)
+            except:
+                self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+                self.jtag.stop()
+                self.startButton.setEnabled(True)
+                return
+            self.socket.readyRead.connect(self.read_data)
+            self.startButton.setText("Stop")
+            self.startButton.setEnabled(True)
+            self.logViewer.appendPlainText("server started")
+            self.idle = False
+        else:
+            self.startButton.setEnabled(False)
+            self.active = 0
+            self.ep6_timer.stop()
+            self.cfg_timer.stop()
+            self.io.stop()
+            self.jtag.stop()
+            self.startButton.setText("Start")
+            self.startButton.setEnabled(True)
+            self.logViewer.appendPlainText("server stopped")
+            self.idle = True
+
+    def read_data(self):
+        datagram = self.socket.receiveDatagram()
+        addr = datagram.senderAddress()
+        port = datagram.senderPort()
+        data = np.frombuffer(datagram.data(), np.uint8)
+        if data.size < 4:
+            return
+        code = data[0:4].view(np.uint32)[0]
+        if code == 0x0201FEEF:
+            self.ep2(data[11:16])
+            self.ep2(data[523:528])
+        elif code == 0x0002FEEF:
+            self.reply[2] = 2 + self.active
+            self.socket.writeDatagram(self.reply.tobytes(), addr, port)
+        elif code == 0x0004FEEF:
+            self.active = 0
+            self.ep6_timer.stop()
+            self.cfg_timer.stop()
+            self.logViewer.appendPlainText("client disconnected")
+        elif code in {0x0104FEEF, 0x0204FEEF, 0x0304FEEF}:
+            self.counter.fill(0)
+            self.addr = addr
+            self.port = port
+            self.active = 1
+            self.offset = 0
+            self.receivers = 0
+            self.config.fill(0)
+            self.config[1] = 2560
+            self.reset_fifo()
+            self.ep6_timer.start(5)
+            self.cfg_timer.start(100)
+            self.logViewer.appendPlainText("client connected")
+
+    def ep2(self, data):
+        code = data[0]
+        freq = np.flip(data[1:5]).copy().view(np.uint32)[0]
+        if code in {0, 1}:
+            value = ((data[4] >> 3) & 7) + 1
+            if self.receivers != value:
+                self.receivers = value
+                self.logViewer.appendPlainText("number of receivers: %d" % value)
+            value = Server.rates[data[1] & 3]
+            if self.config[1] != value:
+                self.config[1] = value
+                rate = 61440 // value
+                self.logViewer.appendPlainText("sample rate: %d kS/s" % rate)
+        elif 4 <= code <= 17:
+            n = code // 2
+            value = np.floor(freq / 122.88e6 * (1 << 30) + 0.5)
+            if self.config[n] != value:
+                self.config[n] = value
+                self.logViewer.appendPlainText("RX%d frequency: %d Hz" % (n - 1, freq))
+        elif code in {36, 37}:
+            value = np.floor(freq / 122.88e6 * (1 << 30) + 0.5)
+            if self.config[9] != value:
+                self.config[9] = value
+                self.logViewer.appendPlainText("RX8 frequency: %d Hz" % freq)
+
+    def input_changed(self, index, value):
+        if value > 0:
+            self.config[0] |= 1 << index
+        else:
+            self.config[0] &= ~(1 << index)
+
+    def cfg(self):
+        try:
+            self.io.write(self.config, 0, 1)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            self.start()
+            return
+
+    def reset_fifo(self):
+        try:
+            self.io.write(np.uint32([0]), 0, 0)
+            self.io.write(np.uint32([1]), 0, 0)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            self.start()
+            return
+
+    def ep6(self):
+        size = self.receivers * 6 + 2
+        n = 504 // size
+
+        try:
+            self.io.read(self.status, 1, 0)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            self.start()
+            return
+
+        cntr = self.status[0]
+        if cntr >= 4096:
+            self.logViewer.appendPlainText("FIFO buffer overflow")
+            self.reset_fifo()
+            cntr = 0
+
+        m = cntr // (n * 2)
+
+        if m < 1:
+            return
+
+        view = self.samples[: m * n * 96]
+
+        try:
+            self.io.read(view, 2)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            self.start()
+            return
+
+        self.counter.view(np.uint32)[0] += 1
+        self.buffer[4:8] = np.flip(self.counter)
+
+        offset = 0
+        src_slice = np.mod(np.arange(48 * n), 48) < size - 2
+        dst_slice = np.mod(np.arange(size * n), size) < size - 2
+        for i in range(m):
+            self.buffer[8:16] = Server.header[self.offset]
+            self.offset += 1
+            if self.offset > 4:
+                self.offset = 0
+
+            src = self.samples[offset : offset + 48 * n]
+            dst = self.buffer[16 : 16 + size * n]
+            dst[dst_slice] = src[src_slice]
+            offset += 48 * n
+
+            self.buffer[520:528] = Server.header[self.offset]
+            self.offset += 1
+            if self.offset > 4:
+                self.offset = 0
+
+            src = self.samples[offset : offset + 48 * n]
+            dst = self.buffer[528 : 528 + size * n]
+            dst[dst_slice] = src[src_slice]
+            offset += 48 * n
+
+            self.socket.writeDatagram(self.buffer.tobytes(), self.addr, self.port)
+
+
+app = QApplication(sys.argv)
+window = Server()
+window.show()
+sys.exit(app.exec_())
