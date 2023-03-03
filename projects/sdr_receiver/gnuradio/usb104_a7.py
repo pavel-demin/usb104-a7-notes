@@ -35,6 +35,7 @@ class source(gr.sync_block):
             self, name="usb104_a7_source", in_sig=None, out_sig=[np.complex64]
         )
         self.io = PyhubIO()
+        self.io.start()
         self.io.flush()
         self.io.write(np.uint32(source.adc_cfg), 2)
         self.config = np.zeros(4, np.uint32)
@@ -50,7 +51,7 @@ class source(gr.sync_block):
         self.io.read(self.status, 1)
         cntr = self.status[0]
         if cntr >= 16384:
-            print("overflow", cntr)
+            print("FIFO buffer overflow")
             self.io.write(np.uint32([0]), 0, 0)
             self.io.write(np.uint32([1]), 0, 0)
             cntr = 0
