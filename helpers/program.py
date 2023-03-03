@@ -7,6 +7,7 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 jtag = PyhubJTAG()
+jtag.start()
 jtag.flush()
 jtag.setup()
 jtag.idle()
