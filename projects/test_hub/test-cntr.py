@@ -4,6 +4,8 @@ import time
 
 io = PyhubIO()
 
+io.start()
+
 data = np.arange(128 * 2**20, dtype=np.uint32)
 
 buffer = np.zeros(4096, np.uint32)

@@ -4,6 +4,8 @@ import time
 
 io = PyhubIO()
 
+io.start()
+
 for i in range(11):
     io.write(np.uint32([i % 2]), 0)
     time.sleep(0.5)
