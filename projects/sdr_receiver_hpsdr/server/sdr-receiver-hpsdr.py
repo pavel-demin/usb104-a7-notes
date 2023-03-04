@@ -10,7 +10,7 @@ import numpy as np
 from pyhubio import PyhubIO, PyhubJTAG
 
 from PySide2.QtUiTools import loadUiType
-from PySide2.QtCore import Qt, QTimer
+from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QApplication, QMainWindow, QLabel, QComboBox
 from PySide2.QtNetwork import QUdpSocket, QHostAddress
 
@@ -61,13 +61,12 @@ class Server(QMainWindow, Ui_Server):
         self.config[1] = 2560
         # create controls
         self.startButton.clicked.connect(self.start)
-        self.inputValue = {}
         for i in range(8):
             label = QLabel("RX%d input" % (i + 1))
             self.inputLayout.addWidget(label, i * 2 + 0, 0)
             input = QComboBox()
             input.addItems(["CH1", "CH2"])
-            input.currentIndexChanged.connect(partial(self.input_changed, i))
+            input.currentIndexChanged.connect(partial(self.update_input, i))
             self.inputLayout.addWidget(input, i * 2 + 1, 0)
         # create IO
         self.jtag = PyhubJTAG()
@@ -76,14 +75,14 @@ class Server(QMainWindow, Ui_Server):
         self.socket = QUdpSocket(self)
         self.socket.bind(1024)
         # create timers
-        self.ep6_timer = QTimer(self)
-        self.ep6_timer.timeout.connect(self.ep6)
-        self.cfg_timer = QTimer(self)
-        self.cfg_timer.timeout.connect(self.cfg)
+        self.dataTimer = QTimer(self)
+        self.dataTimer.timeout.connect(self.send_data)
+        self.ctrlTimer = QTimer(self)
+        self.ctrlTimer.timeout.connect(self.send_ctrl)
 
     def start(self):
+        self.startButton.setEnabled(False)
         if self.idle:
-            self.startButton.setEnabled(False)
             try:
                 self.jtag.start()
                 self.jtag.flush()
@@ -107,20 +106,19 @@ class Server(QMainWindow, Ui_Server):
                 return
             self.socket.readyRead.connect(self.read_data)
             self.startButton.setText("Stop")
-            self.startButton.setEnabled(True)
             self.logViewer.appendPlainText("server started")
             self.idle = False
         else:
-            self.startButton.setEnabled(False)
             self.active = 0
-            self.ep6_timer.stop()
-            self.cfg_timer.stop()
+            self.dataTimer.stop()
+            self.ctrlTimer.stop()
+            self.socket.readyRead.disconnect()
             self.io.stop()
             self.jtag.stop()
             self.startButton.setText("Start")
-            self.startButton.setEnabled(True)
             self.logViewer.appendPlainText("server stopped")
             self.idle = True
+        self.startButton.setEnabled(True)
 
     def read_data(self):
         datagram = self.socket.receiveDatagram()
@@ -131,15 +129,15 @@ class Server(QMainWindow, Ui_Server):
             return
         code = data[0:4].view(np.uint32)[0]
         if code == 0x0201FEEF:
-            self.ep2(data[11:16])
-            self.ep2(data[523:528])
+            self.update_config(data[11:16])
+            self.update_config(data[523:528])
         elif code == 0x0002FEEF:
             self.reply[2] = 2 + self.active
             self.socket.writeDatagram(self.reply.tobytes(), addr, port)
         elif code == 0x0004FEEF:
             self.active = 0
-            self.ep6_timer.stop()
-            self.cfg_timer.stop()
+            self.dataTimer.stop()
+            self.ctrlTimer.stop()
             self.logViewer.appendPlainText("client disconnected")
         elif code in {0x0104FEEF, 0x0204FEEF, 0x0304FEEF}:
             self.counter.fill(0)
@@ -151,11 +149,11 @@ class Server(QMainWindow, Ui_Server):
             self.config.fill(0)
             self.config[1] = 2560
             self.reset_fifo()
-            self.ep6_timer.start(5)
-            self.cfg_timer.start(100)
+            self.dataTimer.start(5)
+            self.ctrlTimer.start(100)
             self.logViewer.appendPlainText("client connected")
 
-    def ep2(self, data):
+    def update_config(self, data):
         code = data[0]
         freq = np.flip(data[1:5]).copy().view(np.uint32)[0]
         if code in {0, 1}:
@@ -180,13 +178,13 @@ class Server(QMainWindow, Ui_Server):
                 self.config[9] = value
                 self.logViewer.appendPlainText("RX8 frequency: %d Hz" % freq)
 
-    def input_changed(self, index, value):
+    def update_input(self, index, value):
         if value > 0:
             self.config[0] |= 1 << index
         else:
             self.config[0] &= ~(1 << index)
 
-    def cfg(self):
+    def send_ctrl(self):
         try:
             self.io.write(self.config, 0, 1)
         except:
@@ -203,7 +201,7 @@ class Server(QMainWindow, Ui_Server):
             self.start()
             return
 
-    def ep6(self):
+    def send_data(self):
         size = self.receivers * 6 + 2
         n = 504 // size
 
@@ -228,7 +226,7 @@ class Server(QMainWindow, Ui_Server):
         view = self.samples[: m * n * 96]
 
         try:
-            self.io.read(view, 2)
+            self.io.read(view, 2, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()
