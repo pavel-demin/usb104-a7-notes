@@ -1,0 +1,231 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: fm_usb
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: ''
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 24.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: rx_freq
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Frequency (MHz)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '80'
+    step: '0.1'
+    stop: '120'
+    value: '100.0'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 20.0]
+    rotation: 0
+    state: enabled
+- name: rx_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '768000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 24.0]
+    rotation: 180
+    state: enabled
+- name: analog_wfm_rcv_0
+  id: analog_wfm_rcv
+  parameters:
+    affinity: ''
+    alias: ''
+    audio_decimation: '1'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quad_rate: rx_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 248.0]
+    rotation: 0
+    state: true
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 256.0]
+    rotation: 0
+    state: true
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nfrom pyhubio import PyhubIO, PyhubJTAG\n\
+      import numpy as np\nimport time\n\n\nclass source(gr.sync_block):\n    rate_map\
+      \ = {\n        24000: 2560,\n        48000: 1280,\n        96000: 640,\n   \
+      \     192000: 320,\n        384000: 160,\n        768000: 80,\n        1536000:\
+      \ 40,\n    }\n    adc_cfg = [\n        0x00003C,\n        0x000803,\n      \
+      \  0x000800,\n        0x000502,\n        0x001421,\n        0x000501,\n    \
+      \    0x001431,\n    ]\n\n    def __init__(self, rate=48000, frequency=1000000):\n\
+      \        gr.sync_block.__init__(self, name=\"USB104 A7 Source\", in_sig=None,\
+      \ out_sig=[np.complex64])\n        self.rate = rate\n        self.frequency\
+      \ = frequency\n        self.jtag = PyhubJTAG()\n        self.jtag.start()\n\
+      \        self.jtag.flush()\n        self.jtag.setup()\n        self.jtag.idle()\n\
+      \        self.jtag.program(\"sdr_receiver.bit\")\n        time.sleep(0.1)\n\
+      \        self.io = PyhubIO()\n        self.io.start()\n        self.io.flush()\n\
+      \        self.io.write(np.uint32(self.adc_cfg), 2)\n        self.config = np.zeros(4,\
+      \ np.uint32)\n        self.status = np.zeros(1, np.uint32)\n        self.io.write(self.config,\
+      \ 0, 1)\n        self.io.write(np.uint32([1]), 0, 0)\n\n    def work(self, input_items,\
+      \ output_items):\n        out = output_items[0]\n        if self.rate in self.rate_map:\n\
+      \            self.config[1] = self.rate_map[self.rate]\n        self.config[2]\
+      \ = np.floor(self.frequency / 122.88e6 * (1 << 30) + 0.5)\n        self.config[3]\
+      \ = self.config[2] == 0\n        self.io.write(self.config, 0, 1)\n        self.io.read(self.status,\
+      \ 1, 0)\n        cntr = self.status[0]\n        if cntr >= 32768:\n        \
+      \    print(\"FIFO buffer overflow\")\n            self.io.write(np.uint32([0]),\
+      \ 0, 0)\n            self.io.write(np.uint32([1]), 0, 0)\n            cntr =\
+      \ 0\n        while cntr < out.size * 2:\n            time.sleep(0.001)\n   \
+      \         self.io.read(self.status, 1, 0)\n            cntr = self.status[0]\n\
+      \        self.io.read(out, 2, 0)\n        return out.size\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    frequency: rx_freq*1000000
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rate: rx_rate
+  states:
+    _io_cache: ('USB104 A7 Source', 'source', [('rate', '48000'), ('frequency', '1000000')],
+      [], [('0', 'complex', 1)], '', ['frequency', 'rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 248.0]
+    rotation: 0
+    state: true
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: '90000'
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: rx_rate
+    type: fir_filter_ccf
+    width: '10000'
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 200.0]
+    rotation: 0
+    state: true
+- name: qtgui_sink_x_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: rx_rate
+    comment: ''
+    fc: rx_freq*1000000
+    fftsize: '1024'
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: ''
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: complex
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 404.0]
+    rotation: 0
+    state: true
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '16'
+    fbw: '0'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 228.0]
+    rotation: 0
+    state: true
+
+connections:
+- [analog_wfm_rcv_0, '0', rational_resampler_xxx_0, '0']
+- [epy_block_0, '0', low_pass_filter_0, '0']
+- [epy_block_0, '0', qtgui_sink_x_0, '0']
+- [low_pass_filter_0, '0', analog_wfm_rcv_0, '0']
+- [rational_resampler_xxx_0, '0', audio_sink_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.5.1
