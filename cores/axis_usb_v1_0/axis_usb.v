@@ -35,18 +35,17 @@ module axis_usb
   wire int_rx_valid_wire, int_rx_ready_wire;
   wire int_rx_rd_wire, int_rx_oe_wire;
 
-  assign int_rx_valid_wire = ~usb_empty & int_rx_oe_reg;
-  assign int_rx_ready_wire = ~int_rx_full_wire;
-
-  assign int_rx_rd_wire = int_rx_valid_wire & int_rx_ready_wire;
-
   assign int_tx_valid_wire = ~int_tx_empty_wire & ~int_rx_oe_reg;
   assign int_tx_ready_wire = ~usb_full;
 
   assign int_tx_rd_wire = int_tx_valid_wire & int_tx_ready_wire;
-
-  assign int_rx_oe_wire = ~usb_empty & int_rx_ready_wire;
   assign int_tx_si_wire = &int_idle_cntr_reg & ~int_tx_valid_wire;
+
+  assign int_rx_valid_wire = ~usb_empty & int_rx_oe_reg;
+  assign int_rx_ready_wire = ~int_rx_full_wire;
+
+  assign int_rx_rd_wire = int_rx_valid_wire & int_rx_ready_wire;
+  assign int_rx_oe_wire = ~usb_empty & int_rx_ready_wire;
 
   xpm_fifo_async #(
     .WRITE_DATA_WIDTH(32),
