@@ -33,9 +33,23 @@ The [projects/sdr_receiver](https://github.com/pavel-demin/usb104-a7-notes/tree/
 Software
 -----
 
-The [projects/sdr_receiver/gnuradio](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio) directory contains an example of a flow graph configuration for [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion).
+The [projects/sdr_receiver/server](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/server) directory contains the source code of the ZMQ server ([sdr-receiver.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/server/sdr-receiver.py)) that receives control commands and transmits the I/Q data streams to the SDR programs.
 
-Getting started with GNU Radio
+The [projects/sdr_receiver/gnuradio](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio) directory directory contains flowgraph configuration examples for [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion).
+
+Getting started with GNU Radio on Windows
+-----
+
+ - Connect an antenna to the CH1 connector of the Zmod Digitizer module.
+ - Connect the USB104 A7 board to a USB port.
+ - Download and unpack the [release zip file]({{ site.release-file }}).
+ - Install WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
+ - Run the `sdr-receiver.exe` program.
+ - Press Start button.
+ - Download and install [radioconda](https://github.com/ryanvolz/radioconda).
+ - Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open FM receiver flow graph (`fm_usb.grc`).
+
+Getting started with GNU Radio on Linux
 -----
 
  - Connect an antenna to the CH1 connector of the Zmod Digitizer module.
@@ -60,9 +74,9 @@ make NAME=sdr_receiver run
  - Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open FM receiver flow graph:
 {% highlight bash %}
 cd projects/sdr_receiver/gnuradio
-export GRC_BLOCKS_PATH=.
-gnuradio-companion fm.grc
+gnuradio-companion fm_usb.grc
 {% endhighlight %}
+
 
 Building from source
 -----
