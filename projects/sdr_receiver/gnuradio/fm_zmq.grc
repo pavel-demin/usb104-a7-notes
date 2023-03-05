@@ -28,7 +28,7 @@ options:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 24.0]
+    coordinate: [8, 8.0]
     rotation: 0
     state: enabled
 
@@ -51,7 +51,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 20.0]
+    coordinate: [328, 4.0]
     rotation: 0
     state: enabled
 - name: rx_rate
@@ -63,7 +63,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [232, 24.0]
+    coordinate: [216, 8.0]
     rotation: 180
     state: enabled
 - name: analog_wfm_rcv_0
@@ -80,7 +80,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [600, 248.0]
+    coordinate: [576, 208.0]
     rotation: 0
     state: true
 - name: audio_sink_0
@@ -97,7 +97,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1112, 256.0]
+    coordinate: [1080, 216.0]
     rotation: 0
     state: true
 - name: epy_block_0
@@ -123,7 +123,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 432.0]
+    coordinate: [768, 368.0]
     rotation: 0
     state: true
 - name: low_pass_filter_0
@@ -147,7 +147,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 200.0]
+    coordinate: [328, 160.0]
     rotation: 0
     state: true
 - name: qtgui_sink_x_0
@@ -176,7 +176,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 404.0]
+    coordinate: [328, 340.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -196,7 +196,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 228.0]
+    coordinate: [832, 188.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0
@@ -217,7 +217,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1120, 412.0]
+    coordinate: [1080, 348.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
@@ -239,7 +239,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 228.0]
+    coordinate: [8, 188.0]
     rotation: 0
     state: true
 
