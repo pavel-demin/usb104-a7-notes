@@ -216,7 +216,7 @@ class Server(QMainWindow, Ui_Server):
         if cntr >= 4096:
             self.logViewer.appendPlainText("FIFO buffer overflow")
             self.reset_fifo()
-            cntr = 0
+            return
 
         m = cntr // (n * 2)
 
