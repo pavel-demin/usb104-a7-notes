@@ -118,17 +118,16 @@ blocks:
       \   jtag.start()\n        jtag.flush()\n        jtag.setup()\n        jtag.idle()\n\
       \        jtag.program(\"sdr_receiver.bit\")\n        time.sleep(0.1)\n     \
       \   self.io = PyhubIO()\n        self.io.start()\n        self.io.flush()\n\
-      \        self.io.write(np.uint32(self.adc_cfg), 2)\n        self.io.write(np.uint32([1]),\
-      \ 0, 0)\n\n    def work(self, input_items, output_items):\n        self.start_io()\n\
+      \        self.io.write(np.uint32(self.adc_cfg), 2)\n        self.io.edge(0,\
+      \ 0, True, 0)\n\n    def work(self, input_items, output_items):\n        self.start_io()\n\
       \        out = output_items[0]\n        if self.rate in self.rate_map:\n   \
       \         self.config[1] = self.rate_map[self.rate]\n        self.config[2]\
       \ = np.floor(self.frequency / 122.88e6 * (1 << 30) + 0.5)\n        self.config[3]\
       \ = self.config[2] == 0\n        self.io.write(self.config, 0, 1)\n        self.io.read(self.status,\
       \ 1, 0)\n        cntr = self.status[0]\n        if cntr >= 32768:\n        \
-      \    print(\"FIFO buffer overflow\")\n            self.io.write(np.uint32([0]),\
-      \ 0, 0)\n            self.io.write(np.uint32([1]), 0, 0)\n            cntr =\
-      \ 0\n        while cntr < out.size * 2:\n            time.sleep(0.001)\n   \
-      \         self.io.read(self.status, 1, 0)\n            cntr = self.status[0]\n\
+      \    print(\"FIFO buffer overflow\")\n            self.io.edge(0, 0, True, 0)\n\
+      \            cntr = 0\n        while cntr < out.size * 2:\n            time.sleep(0.001)\n\
+      \            self.io.read(self.status, 1, 0)\n            cntr = self.status[0]\n\
       \        self.io.read(out, 2, 0)\n        return out.size\n"
     affinity: ''
     alias: ''
