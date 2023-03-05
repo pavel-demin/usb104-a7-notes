@@ -67,12 +67,13 @@ pip install https://github.com/pavel-demin/pyhubio/archive/master.zip
 git clone https://github.com/pavel-demin/usb104-a7-notes
 cd usb104-a7-notes
 {% endhighlight %}
- - Configure the FPGA on the USB104 A7 board:
+ - Build `sdr_receiver.bit` bitstream file for FPGA configuration:
 {% highlight bash %}
-make NAME=sdr_receiver run
+make NAME=sdr_receiver bit
 {% endhighlight %}
  - Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open FM receiver flow graph:
 {% highlight bash %}
+cp tmp/sdr_receiver.bit projects/sdr_receiver/gnuradio
 cd projects/sdr_receiver/gnuradio
 gnuradio-companion fm_usb.grc
 {% endhighlight %}
