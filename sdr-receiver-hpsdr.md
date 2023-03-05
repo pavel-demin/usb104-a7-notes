@@ -15,7 +15,7 @@ The HPSDR/Metis communication protocol is described in the following documents:
 
  - [HPSDR - USB Data Protocol](https://github.com/TAPR/OpenHPSDR-SVN/raw/master/Documentation/USB_protocol_V1.58.doc)
 
-This application requires that the Zmod Digitizer is connected to the ZMOD A connector of the USB104 A7 board.
+This application requires the Zmod Digitizer module to be connected to the ZMOD A connector of the USB104 A7 board.
 
 Hardware
 -----
@@ -50,9 +50,9 @@ Getting started
 
  - Download and unpack the [release zip file]({{ site.release-file }}).
  - Copy the contents of the zip file to a directory.
- - Install WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
+ - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
  - Run the `sdr-receiver-hpsdr.exe` program.
- - Press Start button.
+ - Press the Start button.
  - Install and run one of the HPSDR programs.
 
 Running CW Skimmer Server and Reverse Beacon Network Aggregator
