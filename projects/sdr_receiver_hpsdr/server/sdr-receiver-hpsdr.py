@@ -29,7 +29,7 @@ class Server(QMainWindow, Ui_Server):
         [127, 127, 127, 24, 0, 0, 0, 0],
         [127, 127, 127, 32, 66, 66, 66, 66],
     ]
-    rates = [1280, 640, 320, 160]
+    rate_map = [1280, 640, 320, 160]
     adc_cfg = [
         0x00003C,
         0x000803,
@@ -45,8 +45,6 @@ class Server(QMainWindow, Ui_Server):
         self.setupUi(self)
         # initialize variables
         self.idle = True
-        self.reply = np.zeros(60, np.uint8)
-        self.reply[0:20] = Server.reply
         self.samples = np.zeros(48 * 4096, np.uint8)
         self.buffer = np.zeros(1032, np.uint8)
         self.buffer.view(np.uint32)[0:4] = 0x0601FEEF
@@ -88,7 +86,7 @@ class Server(QMainWindow, Ui_Server):
                 self.jtag.flush()
                 self.jtag.setup()
                 self.jtag.idle()
-                self.jtag.program(Server.bitstream)
+                self.jtag.program(self.bitstream)
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.startButton.setEnabled(True)
@@ -98,7 +96,7 @@ class Server(QMainWindow, Ui_Server):
             try:
                 self.io.start()
                 self.io.flush()
-                self.io.write(np.uint32(Server.adc_cfg), 2)
+                self.io.write(np.uint32(self.adc_cfg), 2)
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.jtag.stop()
@@ -132,8 +130,10 @@ class Server(QMainWindow, Ui_Server):
             self.update_config(data[11:16])
             self.update_config(data[523:528])
         elif code == 0x0002FEEF:
-            self.reply[2] = 2 + self.active
-            self.socket.writeDatagram(self.reply.tobytes(), addr, port)
+            self.buffer.fill(0)
+            self.buffer[0:20] = self.reply
+            self.buffer[2] = 2 + self.active
+            self.socket.writeDatagram(self.buffer[:60].tobytes(), addr, port)
         elif code == 0x0004FEEF:
             self.active = 0
             self.dataTimer.stop()
@@ -161,7 +161,7 @@ class Server(QMainWindow, Ui_Server):
             if self.receivers != value:
                 self.receivers = value
                 self.logViewer.appendPlainText("number of receivers: %d" % value)
-            value = Server.rates[data[1] & 3]
+            value = self.rate_map[data[1] & 3]
             if self.config[1] != value:
                 self.config[1] = value
                 rate = 61440 // value
@@ -190,16 +190,13 @@ class Server(QMainWindow, Ui_Server):
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()
-            return
 
     def reset_fifo(self):
         try:
-            self.io.write(np.uint32([0]), 0, 0)
-            self.io.write(np.uint32([1]), 0, 0)
+            self.io.edge(0, 0, True, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()
-            return
 
     def send_data(self):
         size = self.receivers * 6 + 2
@@ -239,7 +236,7 @@ class Server(QMainWindow, Ui_Server):
         src_slice = np.mod(np.arange(48 * n), 48) < size - 2
         dst_slice = np.mod(np.arange(size * n), size) < size - 2
         for i in range(m):
-            self.buffer[8:16] = Server.header[self.offset]
+            self.buffer[8:16] = self.header[self.offset]
             self.offset += 1
             if self.offset > 4:
                 self.offset = 0
@@ -249,7 +246,7 @@ class Server(QMainWindow, Ui_Server):
             dst[dst_slice] = src[src_slice]
             offset += 48 * n
 
-            self.buffer[520:528] = Server.header[self.offset]
+            self.buffer[520:528] = self.header[self.offset]
             self.offset += 1
             if self.offset > 4:
                 self.offset = 0
