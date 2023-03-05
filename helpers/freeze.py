@@ -1,4 +1,5 @@
 from py2exe import freeze
+from glob import glob
 
 includes = [
     "PySide2.QtCore",
@@ -16,6 +17,10 @@ includes = [
     "zmq.backend.cython",
 ]
 
+pyzmq_libs = "c:\\Python310\\Lib\\site-packages\\pyzmq.libs\\"
+libsodium = glob(pyzmq_libs + "libsodium*.dll")[0]
+libzmq = glob(pyzmq_libs + "libzmq*.dll")[0]
+
 freeze(
     windows=[{"script": "exec.py"}, {"script": "pyside2-uic.py"}],
     data_files=[
@@ -27,8 +32,8 @@ freeze(
                 "c:\\Python310\\Lib\\site-packages\\PySide2\\designer.exe",
                 "c:\\Python310\\Lib\\site-packages\\PySide2\\uic.exe",
                 "c:\\Python310\\Lib\\site-packages\\usb1\\libusb-1.0.dll",
-                "c:\\Python310\\Lib\\site-packages\\pyzmq.libs\\libsodium-ac42d648.dll",
-                "c:\\Python310\\Lib\\site-packages\\pyzmq.libs\\libzmq-v141-mt-4_3_4-0a6f51ca.dll",
+                libsodium,
+                libzmq,
             ],
         ),
         (
