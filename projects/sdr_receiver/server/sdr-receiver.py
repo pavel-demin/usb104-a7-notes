@@ -75,7 +75,7 @@ class Server(QMainWindow, Ui_Server):
                 self.jtag.flush()
                 self.jtag.setup()
                 self.jtag.idle()
-                self.jtag.program(Server.bitstream)
+                self.jtag.program(self.bitstream)
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.startButton.setEnabled(True)
@@ -85,7 +85,7 @@ class Server(QMainWindow, Ui_Server):
             try:
                 self.io.start()
                 self.io.flush()
-                self.io.write(np.uint32(Server.adc_cfg), 2)
+                self.io.write(np.uint32(self.adc_cfg), 2)
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.jtag.stop()
@@ -103,7 +103,7 @@ class Server(QMainWindow, Ui_Server):
             self.config.fill(0)
             self.config[1] = 5120
             self.dataTimer.stop()
-            self.dataTimer.stop()
+            self.ctrlTimer.stop()
             self.ctrlSocket.disconnect("tcp://127.0.0.1:10002")
             self.io.stop()
             self.jtag.stop()
@@ -148,16 +148,13 @@ class Server(QMainWindow, Ui_Server):
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()
-            return
 
     def reset_fifo(self):
         try:
-            self.io.write(np.uint32([0]), 0, 0)
-            self.io.write(np.uint32([1]), 0, 0)
+            self.io.edge(0, 0, True, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()
-            return
 
     def send_data(self):
         try:
