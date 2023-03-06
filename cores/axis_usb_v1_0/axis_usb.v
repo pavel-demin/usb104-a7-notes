@@ -49,7 +49,7 @@ module axis_usb
 
   xpm_fifo_async #(
     .WRITE_DATA_WIDTH(32),
-    .FIFO_WRITE_DEPTH(4096),
+    .FIFO_WRITE_DEPTH(1024),
     .READ_DATA_WIDTH(8),
     .READ_MODE("fwft"),
     .FIFO_READ_LATENCY(0),
@@ -73,7 +73,7 @@ module axis_usb
 
   xpm_fifo_async #(
     .WRITE_DATA_WIDTH(8),
-    .FIFO_WRITE_DEPTH(16384),
+    .FIFO_WRITE_DEPTH(4096),
     .READ_DATA_WIDTH(32),
     .READ_MODE("fwft"),
     .FIFO_READ_LATENCY(0),
