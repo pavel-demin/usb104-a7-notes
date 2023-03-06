@@ -20,7 +20,7 @@
    <string>SDR receiver</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
      <number>0</number>
     </property>
