@@ -132,7 +132,6 @@ module axis_hub #
 
   reg [11:0] int_awcntr_reg, int_awcntr_next;
   reg [11:0] int_arcntr_reg, int_arcntr_next;
-  reg [HUB_SIZE-1:0] int_rsel_reg;
 
   wire s_axis_awvalid, s_axis_wvalid, s_axis_arvalid;
 
@@ -169,6 +168,8 @@ module axis_hub #
   wire [31:0] int_rdata_mux [MUX_SIZE-1:0];
   wire [MUX_SIZE-1:0] int_wsel_wire, int_rsel_wire;
 
+  wire [HUB_SIZE-1:0] int_bsel_wire;
+
   wire [CFG_SIZE-1:0] int_ce_wire;
   wire int_we_wire, int_re_wire;
 
@@ -201,7 +202,7 @@ module axis_hub #
     for(j = 0; j < HUB_SIZE; j = j + 1)
     begin : MUXES
       assign int_rdata_mux[j+2] = int_svalid_wire[j] ? int_sdata_wire[j] : 32'd0;
-      assign int_rdata_wire[j+2] = int_rsel_reg[j] ? int_bdata_wire[j] : 32'd0;
+      assign int_rdata_wire[j+2] = int_bsel_wire[j] ? int_bdata_wire[j] : 32'd0;
       assign int_mdata_wire[j] = int_wdata_wire;
       assign int_mvalid_wire[j] = int_wsel_wire[j+2];
       assign int_sready_wire[j] = int_rsel_wire[j+2];
@@ -249,13 +250,11 @@ module axis_hub #
     begin
       int_awcntr_reg <= 12'd0;
       int_arcntr_reg <= 12'd0;
-      int_rsel_reg <= {(HUB_SIZE){1'b0}};
     end
     else
     begin
       int_awcntr_reg <= int_awcntr_next;
       int_arcntr_reg <= int_arcntr_next;
-      int_rsel_reg <= int_rsel_wire[2+HUB_SIZE-1:2] & ~int_svalid_wire;
     end
   end
 
@@ -316,12 +315,12 @@ module axis_hub #
   );
 
   output_buffer #(
-    .DATA_WIDTH(32)
+    .DATA_WIDTH(HUB_SIZE + 32)
   ) buf_3 (
     .aclk(aclk), .aresetn(aresetn),
-    .in_data(int_rdata_wire[0]),
+    .in_data({int_rsel_wire[MUX_SIZE-1:2] & ~int_svalid_wire, int_rdata_wire[0]}),
     .in_valid(int_rvalid_wire), .in_ready(int_rready_wire),
-    .out_data(int_rdata_wire[1]),
+    .out_data({int_bsel_wire, int_rdata_wire[1]}),
     .out_valid(m_axis_tvalid), .out_ready(m_axis_tready)
   );
 
