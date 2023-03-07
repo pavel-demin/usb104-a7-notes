@@ -41,9 +41,9 @@ The command consists of 32 bits containing the following information:
 
 information   | bits
 ------------- | -------
-port address  |  0 - 15
-hub address   | 16 - 18
-burst length  | 19 - 30
+port address  |  0 - 17
+hub address   | 18 - 20
+burst length  | 21 - 30
 write/read#   | 31
 
 If the write/read# bit is 1, then the next number of 32-bit data words corresponding to the burst length will be interpreted as data and written to consecutive addresses starting from the address specified in the command.
