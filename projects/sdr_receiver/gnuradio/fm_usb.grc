@@ -116,8 +116,8 @@ blocks:
       \ = np.zeros(1, np.uint32)\n        self.io = None\n\n    def start_io(self):\n\
       \        if self.io:\n            return\n        jtag = PyhubJTAG()\n     \
       \   jtag.start()\n        jtag.flush()\n        jtag.setup()\n        jtag.idle()\n\
-      \        jtag.program(\"sdr_receiver.bit\")\n        time.sleep(0.1)\n     \
-      \   self.io = PyhubIO()\n        self.io.start()\n        self.io.flush()\n\
+      \        jtag.program(\"sdr_receiver.bit\")\n        jtag.stop()\n        time.sleep(0.1)\n\
+      \        self.io = PyhubIO()\n        self.io.start()\n        self.io.flush()\n\
       \        self.io.write(np.uint32(self.adc_cfg), 2)\n        self.io.edge(0,\
       \ 0, True, 0)\n\n    def work(self, input_items, output_items):\n        self.start_io()\n\
       \        out = output_items[0]\n        if self.rate in self.rate_map:\n   \
