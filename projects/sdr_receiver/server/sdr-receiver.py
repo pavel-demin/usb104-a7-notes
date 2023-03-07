@@ -76,6 +76,7 @@ class Server(QMainWindow, Ui_Server):
                 self.jtag.setup()
                 self.jtag.idle()
                 self.jtag.program(self.bitstream)
+                self.jtag.stop()
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.startButton.setEnabled(True)
@@ -88,7 +89,6 @@ class Server(QMainWindow, Ui_Server):
                 self.io.write(np.uint32(self.adc_cfg), 2)
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-                self.jtag.stop()
                 self.startButton.setEnabled(True)
                 return
             self.reset_fifo()
@@ -106,7 +106,6 @@ class Server(QMainWindow, Ui_Server):
             self.ctrlTimer.stop()
             self.ctrlSocket.disconnect("tcp://127.0.0.1:10002")
             self.io.stop()
-            self.jtag.stop()
             self.startButton.setText("Start")
             self.logViewer.appendPlainText("server stopped")
             self.idle = True
