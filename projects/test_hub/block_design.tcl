@@ -149,10 +149,27 @@ cell pavel-demin:user:axis_spi spi_0 {
 cell pavel-demin:user:axis_fifo fifo_1 {
   S_AXIS_TDATA_WIDTH 32
   M_AXIS_TDATA_WIDTH 32
-  WRITE_DEPTH 16384
+  WRITE_DEPTH 4096
 } {
   S_AXIS hub_0/M01_AXIS
   M_AXIS hub_0/S01_AXIS
   aclk pll_0/clk_out1
   aresetn rst_0/peripheral_aresetn
+}
+
+# BRAM
+
+# Create blk_mem_gen
+cell xilinx.com:ip:blk_mem_gen bram_0 {
+  MEMORY_TYPE True_Dual_Port_RAM
+  USE_BRAM_BLOCK Stand_Alone
+  USE_BYTE_WRITE_ENABLE true
+  BYTE_SIZE 8
+  WRITE_WIDTH_A 32
+  WRITE_DEPTH_A 131072
+  REGISTER_PORTA_OUTPUT_OF_MEMORY_PRIMITIVES false
+  REGISTER_PORTB_OUTPUT_OF_MEMORY_PRIMITIVES false
+} {
+  BRAM_PORTA hub_0/B02_BRAM
+  BRAM_PORTB hub_0/B03_BRAM
 }
