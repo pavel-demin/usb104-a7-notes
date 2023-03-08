@@ -72,12 +72,18 @@ Software
 
 A Python library based on [python-libusb1](https://github.com/vpelletier/python-libusb1) is used to communicate with configuration registers, status registers, AXI4-Stream and BRAM ports.
 
-The corresponding Python code can be found in [pyhubio](https://github.com/pavel-demin/pyhubio).
+The Python code of this library can be found in [pyhubio](https://github.com/pavel-demin/pyhubio).
 
 Usage examples
 -----
 
-The code for applications using this USB interface can be found at the following links:
+A basic project with the USB interface connected to the ADC interface via an intermediate FIFO buffer is shown in the following diagram:
+
+![Template project]({{ "/img/template-project.png" | prepend: site.baseurl }})
+
+This template project can be used as a starting point for projects requiring ADC and USB interface. The Tcl code of this project can be found in [projects/template](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/template).
+
+The code for other projects using this USB interface can be found at the following links:
 
  - [Test hub](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/test_hub)
 
