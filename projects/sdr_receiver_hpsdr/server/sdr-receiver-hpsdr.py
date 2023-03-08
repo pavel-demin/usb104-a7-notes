@@ -55,7 +55,6 @@ class Server(QMainWindow, Ui_Server):
         self.receivers = 0
         self.config = np.zeros(10, np.uint32)
         self.status = np.zeros(1, np.uint32)
-        self.config[1] = 2560
         # create controls
         self.startButton.clicked.connect(self.start)
         for i in range(8):

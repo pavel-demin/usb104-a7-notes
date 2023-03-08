@@ -45,7 +45,6 @@ class Server(QMainWindow, Ui_Server):
         self.samples = np.zeros(16384, np.uint32)
         self.config = np.zeros(4, np.uint32)
         self.status = np.zeros(1, np.uint32)
-        self.config[1] = 5120
         # create controls
         self.startButton.clicked.connect(self.start)
         self.inputBox.addItems(["CH1", "CH2"])
@@ -86,6 +85,8 @@ class Server(QMainWindow, Ui_Server):
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.startButton.setEnabled(True)
                 return
+            self.config.fill(0)
+            self.config[1] = 5120
             self.reset_fifo()
             self.ctrlSocket.connect("tcp://127.0.0.1:10002")
             self.ctrlSocket.setsockopt(zmq.SUBSCRIBE, b"")
@@ -95,8 +96,6 @@ class Server(QMainWindow, Ui_Server):
             self.logViewer.appendPlainText("server started")
             self.idle = False
         else:
-            self.config.fill(0)
-            self.config[1] = 5120
             self.dataTimer.stop()
             self.ctrlTimer.stop()
             self.ctrlSocket.disconnect("tcp://127.0.0.1:10002")
