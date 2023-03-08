@@ -47,7 +47,6 @@ class Server(QMainWindow, Ui_Server):
         self.idle = True
         self.samples = np.zeros(48 * 4096, np.uint8)
         self.buffer = np.zeros(1032, np.uint8)
-        self.buffer.view(np.uint32)[0:4] = 0x0601FEEF
         self.counter = np.zeros(4, np.uint8)
         self.addr = QHostAddress.Null
         self.port = 0
@@ -119,13 +118,13 @@ class Server(QMainWindow, Ui_Server):
         data = np.frombuffer(datagram.data(), np.uint8)
         if data.size < 4:
             return
-        code = data[0:4].view(np.uint32)[0]
+        code = data[:4].view(np.uint32)[0]
         if code == 0x0201FEEF:
             self.update_config(data[11:16])
             self.update_config(data[523:528])
         elif code == 0x0002FEEF:
             self.buffer.fill(0)
-            self.buffer[0:20] = self.reply
+            self.buffer[:20] = self.reply
             self.buffer[2] = 2 + self.active
             self.socket.writeDatagram(self.buffer[:60].tobytes(), addr, port)
         elif code == 0x0004FEEF:
@@ -222,6 +221,8 @@ class Server(QMainWindow, Ui_Server):
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()
             return
+
+        self.buffer.view(np.uint32)[:4] = 0x0601FEEF
 
         self.counter.view(np.uint32)[0] += 1
         self.buffer[4:8] = np.flip(self.counter)
