@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from pyhubio import PyhubJTAG
 import sys
 
