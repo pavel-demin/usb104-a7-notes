@@ -15,8 +15,8 @@ module axis_fifo #
   input  wire                          aresetn,
 
   // FIFO status
-  output wire [15:0]                   write_count,
-  output wire [15:0]                   read_count,
+  output wire [31:0]                   write_count,
+  output wire [31:0]                   read_count,
 
   // Slave side
   input  wire [S_AXIS_TDATA_WIDTH-1:0] s_axis_tdata,
