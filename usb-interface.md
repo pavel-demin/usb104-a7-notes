@@ -21,7 +21,7 @@ To control, monitor and communicate with all parts of the applications, the foll
 USB interface
 -----
 
-The USB interface consists of two 16 KB FIFO buffers and two AXI4-Stream ports. One of the FIFO buffers is used for data received from the computer and the other FIFO buffer is used for data to be sent to the computer.
+The USB interface consists of two 4 KB FIFO buffers and two AXI4-Stream ports. One of the FIFO buffers is used for data received from the computer and the other FIFO buffer is used for data to be sent to the computer.
 
 The corresponding Verilog code can be found in [cores/axis_usb_v1_0/axis_usb.v](https://github.com/pavel-demin/usb104-a7-notes/blob/master/cores/axis_usb_v1_0/axis_usb.v).
 
@@ -35,7 +35,7 @@ The corresponding Verilog code can be found in [cores/axis_hub_v1_0/axis_hub.v](
 Communication protocol
 -----
 
-Communication packets sent from the computer to the hub interface consist of a 32-bit command followed by 0-4096 32-bit data words.
+Communication packets sent from the computer to the hub interface consist of a 32-bit command followed by 0-1024 32-bit data words.
 
 The command consists of 32 bits containing the following information:
 
