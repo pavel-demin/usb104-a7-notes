@@ -81,7 +81,7 @@ class Server(QMainWindow, Ui_Server):
             try:
                 self.io.start()
                 self.io.flush()
-                self.io.write(np.uint32(self.adc_cfg), 2)
+                self.io.write(np.uint32(self.adc_cfg), 2, 0)
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.startButton.setEnabled(True)
