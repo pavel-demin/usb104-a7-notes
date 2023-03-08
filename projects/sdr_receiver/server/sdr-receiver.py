@@ -71,12 +71,7 @@ class Server(QMainWindow, Ui_Server):
         self.startButton.setEnabled(False)
         if self.idle:
             try:
-                self.jtag.start()
-                self.jtag.flush()
-                self.jtag.setup()
-                self.jtag.idle()
                 self.jtag.program(self.bitstream)
-                self.jtag.stop()
             except:
                 self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
                 self.startButton.setEnabled(True)
