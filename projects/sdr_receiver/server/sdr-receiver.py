@@ -145,7 +145,7 @@ class Server(QMainWindow, Ui_Server):
 
     def reset_fifo(self):
         try:
-            self.io.edge(0, 0, True, 0)
+            self.io.edge(0, 1, True, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             self.start()

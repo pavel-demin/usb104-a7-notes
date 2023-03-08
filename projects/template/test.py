@@ -34,7 +34,7 @@ buffer = np.zeros(size * 2, np.int16)
 status = np.zeros(1, np.uint32)
 
 # reset FIFO buffer
-io.edge(0, 0, True, 0)
+io.edge(0, 1, True, 0)
 
 # wait for FIFO buffer to become full
 io.read(status, 1, 0)
