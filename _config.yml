@@ -4,7 +4,7 @@ description: Notes on the USB104 A7 development board
 baseurl: /usb104-a7-notes
 url: https://pavel-demin.github.io
 
-release-file: https://github.com/pavel-demin/usb104-a7-notes/releases/download/20230304/usb104-a7-apps-win64-20230304.zip
+release-file: https://github.com/pavel-demin/usb104-a7-notes/releases/download/20230310/usb104-a7-apps-win64-20230310.zip
 
 # Build settings
 markdown: kramdown
