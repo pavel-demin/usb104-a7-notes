@@ -36,7 +36,7 @@ The baseline is automatically subtracted. The baseline level is defined as the m
 
 The embedded oscilloscope can be used to check the shape of the pulse at the input of the pulse height analyzer module.
 
-The [projects/mcpha](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/mcpha) directory contains five Tcl files: [block_design.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/block_design.tcl), [pha.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/pha.tcl), [hst.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/hst.tcl), [osc.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/osc.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
+The [projects/mcpha](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/mcpha) directory contains four Tcl files: [block_design.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/block_design.tcl), [pha.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/pha.tcl), [hst.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/hst.tcl), [osc.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/osc.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
 
 The source code of the [R](http://www.r-project.org) script used to calculate the coefficients of the FIR filter can be found in [projects/mcpha/filters/fir_0.r](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/filters/fir_0.r).
 
