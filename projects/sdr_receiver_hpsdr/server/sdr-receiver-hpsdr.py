@@ -47,7 +47,6 @@ class Server(QMainWindow, Ui_Server):
         super(Server, self).__init__()
         self.setupUi(self)
         # initialize variables
-        self.idle = True
         self.samples = np.zeros(48 * 4096, np.uint8)
         self.buffer = np.zeros(1032, np.uint8)
         self.counter = np.zeros(4, np.uint8)
@@ -80,38 +79,36 @@ class Server(QMainWindow, Ui_Server):
         self.ctrlTimer.timeout.connect(self.send_ctrl)
 
     def start(self):
-        self.startButton.setEnabled(False)
-        if self.idle:
-            try:
-                self.jtag.program(self.bitstream)
-            except:
-                self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-                self.startButton.setEnabled(True)
-                return
-            self.logViewer.appendPlainText("FPGA configured")
-            time.sleep(0.1)
-            try:
-                self.io.start()
-                self.io.flush()
-                self.io.write(np.uint32(self.adc_cfg), 2, 0)
-            except:
-                self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-                self.startButton.setEnabled(True)
-                return
-            self.socket.readyRead.connect(self.read_data)
-            self.startButton.setText("Stop")
-            self.logViewer.appendPlainText("server started")
-            self.idle = False
-        else:
-            self.active = 0
-            self.dataTimer.stop()
-            self.ctrlTimer.stop()
-            self.socket.readyRead.disconnect()
-            self.io.stop()
-            self.startButton.setText("Start")
-            self.logViewer.appendPlainText("server stopped")
-            self.idle = True
-        self.startButton.setEnabled(True)
+        try:
+            self.jtag.program(self.bitstream)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            return
+        self.logViewer.appendPlainText("FPGA configured")
+        time.sleep(0.1)
+        try:
+            self.io.start()
+            self.io.flush()
+            self.io.write(np.uint32(self.adc_cfg), 2, 0)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            return
+        self.socket.readyRead.connect(self.read_data)
+        self.startButton.setText("Stop")
+        self.startButton.clicked.disconnect()
+        self.startButton.clicked.connect(self.stop)
+        self.logViewer.appendPlainText("server started")
+
+    def stop(self):
+        self.active = 0
+        self.dataTimer.stop()
+        self.ctrlTimer.stop()
+        self.socket.readyRead.disconnect()
+        self.io.stop()
+        self.startButton.setText("Start")
+        self.startButton.clicked.disconnect()
+        self.startButton.clicked.connect(self.start)
+        self.logViewer.appendPlainText("server stopped")
 
     def read_data(self):
         datagram = self.socket.receiveDatagram()
@@ -184,14 +181,14 @@ class Server(QMainWindow, Ui_Server):
             self.io.write(self.config, 0, 1)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
 
     def reset_fifo(self):
         try:
             self.io.edge(0, 1, True, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
 
     def send_data(self):
         size = self.receivers * 6 + 2
@@ -201,7 +198,7 @@ class Server(QMainWindow, Ui_Server):
             self.io.read(self.status, 1, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
             return
 
         cntr = self.status[0]
@@ -221,7 +218,7 @@ class Server(QMainWindow, Ui_Server):
             self.io.read(view, 2, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
             return
 
         self.buffer.view(np.uint32)[:4] = 0x0601FEEF
