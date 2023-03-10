@@ -39,7 +39,7 @@ module axis_usb
   assign int_tx_ready_wire = ~usb_full;
 
   assign int_tx_rd_wire = int_tx_valid_wire & int_tx_ready_wire;
-  assign int_tx_si_wire = &int_idle_cntr_reg & ~int_tx_valid_wire;
+  assign int_tx_si_wire = &int_idle_cntr_reg & int_tx_empty_wire;
 
   assign int_rx_valid_wire = ~usb_empty & int_rx_oe_reg;
   assign int_rx_ready_wire = ~int_rx_full_wire;
@@ -111,7 +111,7 @@ module axis_usb
 
     // assert send immediately if buffer contains unsent data
     // and fifo_tx stays empty for more than 30 clock cycles
-    if(int_byte_cntr_reg == 9'd510 | usb_full | int_tx_si_wire)
+    if((int_tx_rd_wire & int_byte_cntr_reg == 9'd509) | usb_full | int_tx_si_wire)
     begin
       int_byte_cntr_reg <= 9'd0;
       int_idle_cntr_reg <= 5'd0;
