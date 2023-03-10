@@ -73,12 +73,10 @@ class MCPHA(QMainWindow, Ui_MCPHA):
         self.timer.timeout.connect(self.timeout)
 
     def start(self):
-        self.startButton.clicked.disconnect()
         try:
             self.jtag.program(self.bitstream)
         except:
             self.log.print("error: %s" % sys.exc_info()[1])
-            self.startButton.setEnabled(True)
             return
         self.log.print("FPGA configured")
         time.sleep(0.1)
@@ -88,23 +86,23 @@ class MCPHA(QMainWindow, Ui_MCPHA):
             self.io.write(np.uint32(self.adc_cfg), 2)
         except:
             self.log.print("error: %s" % sys.exc_info()[1])
-            self.startButton.setEnabled(True)
             return
         self.reset.fill(0)
         self.timer.start(200)
         self.startButton.setText("Stop")
+        self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.stop)
         self.log.print("IO started")
         self.idle = False
 
     def stop(self):
-        self.startButton.clicked.disconnect()
         self.hst1.stop()
         self.hst2.stop()
         self.osc.stop()
         self.timer.stop()
         self.io.stop()
         self.startButton.setText("Start")
+        self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.start)
         self.log.print("IO stopped")
         self.idle = True
@@ -320,7 +318,6 @@ class HstDisplay(QWidget, Ui_HstDisplay):
     def start(self):
         if self.mcpha.idle:
             return
-        self.startButton.clicked.disconnect()
         self.set_enable(False)
         h = self.hoursValue.value()
         m = self.minutesValue.value()
@@ -334,18 +331,18 @@ class HstDisplay(QWidget, Ui_HstDisplay):
         self.mcpha.set_timer(self.number, value)
         self.mcpha.set_timer_mode(self.number, 1)
         self.startButton.setText("Stop")
+        self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.stop)
         self.log.print("timer %d started" % (self.number + 1))
 
     def stop(self):
-        self.startButton.clicked.disconnect()
         self.mcpha.set_timer_mode(self.number, 0)
         self.set_enable(True)
         self.set_time(self.time[0])
         self.startButton.setText("Start")
+        self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.start)
         self.log.print("timer %d stopped" % (self.number + 1))
-        self.startButton.setEnabled(True)
 
     def set_enable(self, value):
         if value:
@@ -387,14 +384,12 @@ class HstDisplay(QWidget, Ui_HstDisplay):
         self.set_scale(self.logCheck.isChecked())
 
     def set_thresholds(self, checked):
+        self.minValue.setEnabled(checked)
+        self.maxValue.setEnabled(checked)
         if checked:
-            self.minValue.setEnabled(True)
-            self.maxValue.setEnabled(True)
             self.min = self.minValue.value()
             self.max = self.maxValue.value()
         else:
-            self.minValue.setEnabled(False)
-            self.maxValue.setEnabled(False)
             self.min = 0
             self.max = 16383
 
@@ -535,7 +530,6 @@ class OscDisplay(QWidget, Ui_OscDisplay):
     def start(self):
         if self.mcpha.idle:
             return
-        self.startButton.clicked.disconnect()
         self.mcpha.set_trg_mode(self.autoButton.isChecked())
         self.mcpha.set_trg_source(self.ch2Button.isChecked())
         self.mcpha.set_trg_slope(self.fallingButton.isChecked())
@@ -543,13 +537,14 @@ class OscDisplay(QWidget, Ui_OscDisplay):
         self.mcpha.reset_osc()
         self.mcpha.start_osc()
         self.startButton.setText("Stop")
+        self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.stop)
         self.log.print("oscilloscope started")
 
     def stop(self):
-        self.startButton.clicked.disconnect()
         self.mcpha.stop_osc()
         self.startButton.setText("Start")
+        self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.start)
         self.log.print("oscilloscope stopped")
 
