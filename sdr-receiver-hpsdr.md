@@ -20,7 +20,7 @@ This application requires the Zmod Digitizer module to be connected to the ZMOD 
 Hardware
 -----
 
-The FPGA configuration consists of eight identical digital down-converters (DDC). Their structure is shown on the following diagram:
+The FPGA configuration consists of eight identical digital down-converters (DDC). Their structure is shown in the following diagram:
 
 ![HPSDR receiver]({{ "/img/sdr-receiver-hpsdr.png" | prepend: site.baseurl }})
 
