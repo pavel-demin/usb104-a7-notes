@@ -44,7 +44,6 @@ class Server(QMainWindow, Ui_Server):
         super(Server, self).__init__()
         self.setupUi(self)
         # initialize variables
-        self.idle = True
         self.samples = np.zeros(16384, np.uint32)
         self.config = np.zeros(4, np.uint32)
         self.status = np.zeros(1, np.uint32)
@@ -70,43 +69,41 @@ class Server(QMainWindow, Ui_Server):
         self.ctrlTimer.timeout.connect(self.send_ctrl)
 
     def start(self):
-        self.startButton.setEnabled(False)
-        if self.idle:
-            try:
-                self.jtag.program(self.bitstream)
-            except:
-                self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-                self.startButton.setEnabled(True)
-                return
-            self.logViewer.appendPlainText("FPGA configured")
-            time.sleep(0.1)
-            try:
-                self.io.start()
-                self.io.flush()
-                self.io.write(np.uint32(self.adc_cfg), 2, 0)
-            except:
-                self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-                self.startButton.setEnabled(True)
-                return
-            self.config.fill(0)
-            self.config[1] = 5120
-            self.reset_fifo()
-            self.ctrlSocket.connect("tcp://127.0.0.1:10002")
-            self.ctrlSocket.setsockopt(zmq.SUBSCRIBE, b"")
-            self.dataTimer.start(5)
-            self.ctrlTimer.start(100)
-            self.startButton.setText("Stop")
-            self.logViewer.appendPlainText("server started")
-            self.idle = False
-        else:
-            self.dataTimer.stop()
-            self.ctrlTimer.stop()
-            self.ctrlSocket.disconnect("tcp://127.0.0.1:10002")
-            self.io.stop()
-            self.startButton.setText("Start")
-            self.logViewer.appendPlainText("server stopped")
-            self.idle = True
-        self.startButton.setEnabled(True)
+        try:
+            self.jtag.program(self.bitstream)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            return
+        self.logViewer.appendPlainText("FPGA configured")
+        time.sleep(0.1)
+        try:
+            self.io.start()
+            self.io.flush()
+            self.io.write(np.uint32(self.adc_cfg), 2, 0)
+        except:
+            self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
+            return
+        self.config.fill(0)
+        self.config[1] = 5120
+        self.reset_fifo()
+        self.ctrlSocket.connect("tcp://127.0.0.1:10002")
+        self.ctrlSocket.setsockopt(zmq.SUBSCRIBE, b"")
+        self.dataTimer.start(5)
+        self.ctrlTimer.start(100)
+        self.startButton.setText("Stop")
+        self.startButton.clicked.disconnect()
+        self.startButton.clicked.connect(self.stop)
+        self.logViewer.appendPlainText("server started")
+
+    def stop(self):
+        self.dataTimer.stop()
+        self.ctrlTimer.stop()
+        self.ctrlSocket.disconnect("tcp://127.0.0.1:10002")
+        self.io.stop()
+        self.startButton.setText("Start")
+        self.startButton.clicked.disconnect()
+        self.startButton.clicked.connect(self.start)
+        self.logViewer.appendPlainText("server stopped")
 
     def read_ctrl(self):
         self.ctrlNotifier.setEnabled(False)
@@ -143,21 +140,21 @@ class Server(QMainWindow, Ui_Server):
             self.io.write(self.config, 0, 1)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
 
     def reset_fifo(self):
         try:
             self.io.edge(0, 1, True, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
 
     def send_data(self):
         try:
             self.io.read(self.status, 1, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
             return
 
         cntr = self.status[0]
@@ -177,7 +174,7 @@ class Server(QMainWindow, Ui_Server):
             self.io.read(view, 2, 0)
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
-            self.start()
+            self.stop()
             return
 
         self.dataSocket.send(view.tobytes())
