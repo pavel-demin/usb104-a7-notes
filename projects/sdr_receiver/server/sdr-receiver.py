@@ -29,12 +29,15 @@ class Server(QMainWindow, Ui_Server):
     }
     adc_cfg = [
         0x00003C,
+        0x000503,
         0x000803,
         0x000800,
-        0x000502,
-        0x001421,
         0x000501,
         0x001431,
+        0x000502,
+        0x001425,
+        0x000500,
+        0x002A00,
     ]
 
     def __init__(self):
