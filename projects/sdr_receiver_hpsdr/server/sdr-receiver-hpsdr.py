@@ -50,6 +50,7 @@ class Server(QMainWindow, Ui_Server):
         self.samples = np.zeros(48 * 4096, np.uint8)
         self.buffer = np.zeros(1032, np.uint8)
         self.counter = np.zeros(4, np.uint8)
+        self.socket = None
         self.addr = QHostAddress.Null
         self.port = 0
         self.active = 0
@@ -69,9 +70,6 @@ class Server(QMainWindow, Ui_Server):
         # create IO
         self.jtag = PyhubJTAG()
         self.io = PyhubIO()
-        # create UDP socket
-        self.socket = QUdpSocket(self)
-        self.socket.bind(1024)
         # create timers
         self.dataTimer = QTimer(self)
         self.dataTimer.timeout.connect(self.send_data)
@@ -93,6 +91,8 @@ class Server(QMainWindow, Ui_Server):
         except:
             self.logViewer.appendPlainText("error: %s" % sys.exc_info()[1])
             return
+        self.socket = QUdpSocket(self)
+        self.socket.bind(1024)
         self.socket.readyRead.connect(self.read_data)
         self.startButton.setText("Stop")
         self.startButton.clicked.disconnect()
@@ -103,7 +103,8 @@ class Server(QMainWindow, Ui_Server):
         self.active = 0
         self.dataTimer.stop()
         self.ctrlTimer.stop()
-        self.socket.readyRead.disconnect()
+        self.socket.close()
+        self.socket = None
         self.io.stop()
         self.startButton.setText("Start")
         self.startButton.clicked.disconnect()
