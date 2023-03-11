@@ -17,7 +17,7 @@ includes = [
     "zmq.backend.cython",
 ]
 
-pyzmq_libs = "c:\\Python310\\Lib\\site-packages\\pyzmq.libs\\"
+pyzmq_libs = "c:\\Python38\\Lib\\site-packages\\pyzmq.libs\\"
 libsodium = glob(pyzmq_libs + "libsodium*.dll")[0]
 libzmq = glob(pyzmq_libs + "libzmq*.dll")[0]
 
@@ -27,11 +27,11 @@ freeze(
         (
             "",
             [
-                "c:\\Python310\\Lib\\site-packages\\PySide2\\Qt5Designer.dll",
-                "c:\\Python310\\Lib\\site-packages\\PySide2\\Qt5DesignerComponents.dll",
-                "c:\\Python310\\Lib\\site-packages\\PySide2\\designer.exe",
-                "c:\\Python310\\Lib\\site-packages\\PySide2\\uic.exe",
-                "c:\\Python310\\Lib\\site-packages\\usb1\\libusb-1.0.dll",
+                "c:\\Python38\\Lib\\site-packages\\PySide2\\Qt5Designer.dll",
+                "c:\\Python38\\Lib\\site-packages\\PySide2\\Qt5DesignerComponents.dll",
+                "c:\\Python38\\Lib\\site-packages\\PySide2\\designer.exe",
+                "c:\\Python38\\Lib\\site-packages\\PySide2\\uic.exe",
+                "c:\\Python38\\Lib\\site-packages\\usb1\\libusb-1.0.dll",
                 libsodium,
                 libzmq,
             ],
@@ -39,13 +39,13 @@ freeze(
         (
             "platforms",
             [
-                "c:\\Python310\\Lib\\site-packages\\PySide2\\plugins\\platforms\\qwindows.dll"
+                "c:\\Python38\\Lib\\site-packages\\PySide2\\plugins\\platforms\\qwindows.dll"
             ],
         ),
         (
             "styles",
             [
-                "c:\\Python310\\Lib\\site-packages\\PySide2\\plugins\\styles\\qwindowsvistastyle.dll"
+                "c:\\Python38\\Lib\\site-packages\\PySide2\\plugins\\styles\\qwindowsvistastyle.dll"
             ],
         ),
     ],
