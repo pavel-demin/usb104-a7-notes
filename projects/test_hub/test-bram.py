@@ -5,18 +5,20 @@ io = PyhubIO()
 
 io.start()
 
-data = np.arange(131072, dtype=np.uint32)
+size = 131072
 
-buffer = np.zeros(131072, np.uint32)
+input = np.arange(0, 131072, 1, np.uint32)
+
+output = np.zeros(size, np.uint32)
 
 f = open("input.dat", "wb")
-f.write(data.tobytes())
+f.write(input.tobytes())
 f.close()
 
-io.write(data, 4)
+io.write(input, 4)
 
-io.read(buffer, 4, 0)
+io.read(output, 4, 0)
 
 f = open("output.dat", "wb")
-f.write(buffer.tobytes())
+f.write(output.tobytes())
 f.close()

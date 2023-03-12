@@ -6,31 +6,31 @@ io = PyhubIO()
 
 io.start()
 
-data = np.arange(64 * 2**20, dtype=np.uint32)
+input = np.arange(0, 64 * 2**20, 1, np.uint32)
 
-buffer = np.zeros(4096, np.uint32)
+output = np.zeros(4096, np.uint32)
 
-parts = np.split(data, np.arange(4096, data.size, 4096))
+parts = np.split(input, np.arange(4096, input.size, 4096))
 
 f = open("input.dat", "wb")
-f.write(data.tobytes())
+f.write(input.tobytes())
 f.close()
-
-before = time.time()
 
 f = open("output.dat", "wb")
 
+before = time.time()
+
 for p in parts:
     io.write(p, 3)
-    io.read(buffer, 3)
-    f.write(buffer.tobytes())
-
-f.close()
+    io.read(output, 3)
+    f.write(output.tobytes())
 
 after = time.time()
 
+f.close()
+
 duration = after - before
-speed = data.view(np.uint8).size / duration
+speed = input.view(np.uint8).size / duration
 
 print("time, s:", np.format_float_positional(duration, precision=1))
 print("speed, MB/s:", np.format_float_positional(speed / 2**20, precision=1))
