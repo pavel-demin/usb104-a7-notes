@@ -18,8 +18,12 @@ module axis_usb
   input  wire        m_axis_tready
 );
 
-  reg [8:0] int_byte_cntr_reg = 9'd0;
-  reg [4:0] int_idle_cntr_reg = 5'd0;
+  reg [9:0] int_tx_cntr_reg = 10'd0, int_tx_cntr_next;
+  reg [1:0] int_tx_case_reg = 2'd0, int_tx_case_next;
+  reg int_tx_xtra_reg = 1'b0, int_tx_xtra_next;
+  reg int_tx_oe_reg = 1'b1, int_tx_oe_next;
+  reg int_tx_si_reg = 1'b0, int_tx_si_next;
+
   reg int_rx_oe_reg = 1'b0;
 
   wire [7:0] int_tx_data_wire;
@@ -29,17 +33,17 @@ module axis_usb
 
   wire int_tx_full_wire, int_tx_empty_wire;
   wire int_tx_valid_wire, int_tx_ready_wire;
-  wire int_tx_rd_wire, int_tx_si_wire;
+  wire int_tx_rd_wire, int_tx_wr_wire;
 
   wire int_rx_full_wire, int_rx_empty_wire;
   wire int_rx_valid_wire, int_rx_ready_wire;
   wire int_rx_rd_wire, int_rx_oe_wire;
 
-  assign int_tx_valid_wire = ~int_tx_empty_wire & ~int_rx_oe_reg;
+  assign int_tx_valid_wire = ~int_tx_empty_wire & int_tx_oe_reg;
   assign int_tx_ready_wire = ~usb_full;
 
-  assign int_tx_rd_wire = int_tx_valid_wire & int_tx_ready_wire;
-  assign int_tx_si_wire = &int_idle_cntr_reg & int_tx_empty_wire;
+  assign int_tx_wr_wire = (int_tx_valid_wire | int_tx_xtra_reg) & ~int_rx_oe_reg;
+  assign int_tx_rd_wire = int_tx_valid_wire & int_tx_ready_wire & ~int_rx_oe_reg;
 
   assign int_rx_valid_wire = ~usb_empty & int_rx_oe_reg;
   assign int_rx_ready_wire = ~int_rx_full_wire;
@@ -109,30 +113,90 @@ module axis_usb
     // and rx data transfer operations
     int_rx_oe_reg <= int_rx_oe_wire;
 
-    // assert send immediately if buffer contains unsent data
-    // and fifo_tx stays empty for more than 30 clock cycles
-    if((int_tx_rd_wire & int_byte_cntr_reg == 9'd509) | usb_full | int_tx_si_wire)
-    begin
-      int_byte_cntr_reg <= 9'd0;
-      int_idle_cntr_reg <= 5'd0;
-    end
-    else if(int_tx_rd_wire)
-    begin
-      int_byte_cntr_reg <= int_byte_cntr_reg + 1'b1;
-      int_idle_cntr_reg <= 5'd0;
-    end
-    else if(|int_byte_cntr_reg & int_tx_empty_wire)
-    begin
-      int_idle_cntr_reg <= int_idle_cntr_reg + 1'b1;
-    end
+    int_tx_cntr_reg <= int_tx_cntr_next;
+    int_tx_case_reg <= int_tx_case_next;
+    int_tx_xtra_reg <= int_tx_xtra_next;
+    int_tx_oe_reg <= int_tx_oe_next;
+    int_tx_si_reg <= int_tx_si_next;
+  end
+
+  always @*
+  begin
+    int_tx_cntr_next = int_tx_cntr_reg;
+    int_tx_case_next = int_tx_case_reg;
+    int_tx_xtra_next = int_tx_xtra_reg;
+    int_tx_oe_next = int_tx_oe_reg;
+    int_tx_si_next = int_tx_si_reg;
+
+    case(int_tx_case_reg)
+      2'd0:
+      begin
+        int_tx_si_next = 1'b0;
+        if(~int_tx_empty_wire)
+        begin
+          int_tx_oe_next = 1'b1;
+          int_tx_case_next = 2'd1;
+        end
+      end
+      2'd1:
+      begin
+        if(int_tx_rd_wire)
+        begin
+          int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
+          if(int_tx_cntr_reg == 10'd1019)
+          begin
+            int_tx_cntr_next = 10'd0;
+          end
+        end
+        if(int_tx_empty_wire)
+        begin
+          int_tx_oe_next = 1'b0;
+          if(|int_tx_cntr_reg & int_tx_cntr_reg < 10'd17)
+          begin
+            int_tx_xtra_next = 1'b1;
+            int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
+            int_tx_case_next = 2'd2;
+          end
+          else
+          begin
+            int_tx_cntr_next = 10'd0;
+            int_tx_case_next = 2'd3;
+          end
+        end
+      end
+      2'd2:
+      begin
+        if(int_tx_ready_wire & ~int_rx_oe_reg)
+        begin
+          int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
+          if(int_tx_cntr_reg == 10'd17)
+          begin
+            int_tx_oe_next = 1'b0;
+            int_tx_xtra_next = 1'b0;
+            int_tx_cntr_next = 10'd0;
+            int_tx_case_next = 2'd3;
+          end
+        end
+      end
+      2'd3:
+      begin
+        int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
+        if(int_tx_cntr_reg == 10'd15)
+        begin
+          int_tx_si_next = 1'b1;
+          int_tx_cntr_next = 10'd0;
+          int_tx_case_next = 2'd0;
+        end
+      end
+    endcase
   end
 
   assign s_axis_tready = ~int_tx_full_wire;
 
   assign usb_rdn = ~int_rx_rd_wire;
-  assign usb_wrn = ~int_tx_valid_wire;
+  assign usb_wrn = ~int_tx_wr_wire;
   assign usb_oen = ~int_rx_oe_wire;
-  assign usb_siwun = ~int_tx_si_wire;
-  assign usb_data = int_tx_valid_wire ? int_tx_data_wire : {(8){1'bz}};
+  assign usb_siwun = ~int_tx_si_reg;
+  assign usb_data = int_tx_wr_wire ? int_tx_data_wire : {(8){1'bz}};
 
 endmodule
