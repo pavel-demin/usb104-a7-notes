@@ -21,7 +21,7 @@ module axis_usb
   reg [9:0] int_tx_cntr_reg = 10'd0, int_tx_cntr_next;
   reg [1:0] int_tx_case_reg = 2'd0, int_tx_case_next;
   reg int_tx_xtra_reg = 1'b0, int_tx_xtra_next;
-  reg int_tx_oe_reg = 1'b1, int_tx_oe_next;
+  reg int_tx_oe_reg = 1'b0, int_tx_oe_next;
   reg int_tx_si_reg = 1'b0, int_tx_si_next;
 
   reg int_rx_oe_reg = 1'b0;
@@ -42,8 +42,8 @@ module axis_usb
   assign int_tx_valid_wire = ~int_tx_empty_wire & int_tx_oe_reg;
   assign int_tx_ready_wire = ~usb_full;
 
-  assign int_tx_wr_wire = (int_tx_valid_wire | int_tx_xtra_reg) & ~int_rx_oe_reg;
   assign int_tx_rd_wire = int_tx_valid_wire & int_tx_ready_wire & ~int_rx_oe_reg;
+  assign int_tx_wr_wire = (int_tx_valid_wire | int_tx_xtra_reg) & ~int_rx_oe_reg;
 
   assign int_rx_valid_wire = ~usb_empty & int_rx_oe_reg;
   assign int_rx_ready_wire = ~int_rx_full_wire;
@@ -154,12 +154,11 @@ module axis_usb
           if(|int_tx_cntr_reg & int_tx_cntr_reg < 10'd17)
           begin
             int_tx_xtra_next = 1'b1;
-            int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
             int_tx_case_next = 2'd2;
           end
           else
           begin
-            int_tx_cntr_next = 10'd0;
+            int_tx_cntr_next = 10'd17;
             int_tx_case_next = 2'd3;
           end
         end
@@ -169,22 +168,19 @@ module axis_usb
         if(int_tx_ready_wire & ~int_rx_oe_reg)
         begin
           int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
-          if(int_tx_cntr_reg == 10'd17)
+          if(int_tx_cntr_reg == 10'd16)
           begin
-            int_tx_oe_next = 1'b0;
             int_tx_xtra_next = 1'b0;
-            int_tx_cntr_next = 10'd0;
             int_tx_case_next = 2'd3;
           end
         end
       end
       2'd3:
       begin
-        int_tx_cntr_next = int_tx_cntr_reg + 1'b1;
-        if(int_tx_cntr_reg == 10'd15)
+        int_tx_cntr_next = int_tx_cntr_reg - 1'b1;
+        if(int_tx_cntr_reg == 10'd1)
         begin
           int_tx_si_next = 1'b1;
-          int_tx_cntr_next = 10'd0;
           int_tx_case_next = 2'd0;
         end
       end
