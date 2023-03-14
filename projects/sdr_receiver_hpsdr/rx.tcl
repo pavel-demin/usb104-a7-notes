@@ -21,10 +21,17 @@ cell pavel-demin:user:port_slicer slice_1 {
   din hub_0/cfg_data
 }
 
+# Create port_slicer
+cell pavel-demin:user:port_slicer slice_2 {
+  DIN_WIDTH 352 DIN_FROM 95 DIN_TO 80
+} {
+  din hub_0/cfg_data
+}
+
 for {set i 0} {$i <= 7} {incr i} {
 
   # Create port_slicer
-  cell pavel-demin:user:port_slicer slice_[expr $i + 2] {
+  cell pavel-demin:user:port_slicer slice_[expr $i + 3] {
     DIN_WIDTH 352 DIN_FROM [expr $i + 32] DIN_TO [expr $i + 32]
   } {
     din hub_0/cfg_data
@@ -34,12 +41,12 @@ for {set i 0} {$i <= 7} {incr i} {
   cell pavel-demin:user:port_selector selector_$i {
     DOUT_WIDTH 16
   } {
-    cfg slice_[expr $i + 2]/dout
+    cfg slice_[expr $i + 3]/dout
     din /adc_0/m_axis_tdata
   }
 
   # Create port_slicer
-  cell pavel-demin:user:port_slicer slice_[expr $i + 10] {
+  cell pavel-demin:user:port_slicer slice_[expr $i + 11] {
     DIN_WIDTH 352 DIN_FROM [expr 32 * $i + 127] DIN_TO [expr 32 * $i + 96]
   } {
     din hub_0/cfg_data
@@ -49,7 +56,7 @@ for {set i 0} {$i <= 7} {incr i} {
   cell pavel-demin:user:axis_constant phase_$i {
     AXIS_TDATA_WIDTH 32
   } {
-    cfg_data slice_[expr $i + 10]/dout
+    cfg_data slice_[expr $i + 11]/dout
     aclk /pll_0/clk_out1
   }
 
@@ -226,14 +233,14 @@ cell pavel-demin:user:axis_fifo fifo_0 {
   aresetn slice_0/dout
 }
 
-# Create axis_dwidth_converter
-cell xilinx.com:ip:axis_dwidth_converter conv_2 {
-  S_TDATA_NUM_BYTES.VALUE_SRC USER
-  S_TDATA_NUM_BYTES 48
-  M_TDATA_NUM_BYTES 4
+# Create axis_downsizer
+cell pavel-demin:user:axis_downsizer conv_2 {
+  S_AXIS_TDATA_WIDTH 384
+  M_AXIS_TDATA_WIDTH 32
 } {
   S_AXIS fifo_0/M_AXIS
   M_AXIS hub_0/S00_AXIS
+  cfg_data slice_2/dout
   aclk /pll_0/clk_out1
   aresetn slice_0/dout
 }

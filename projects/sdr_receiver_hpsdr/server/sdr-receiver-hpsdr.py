@@ -55,9 +55,10 @@ class Server(QMainWindow, Ui_Server):
         self.port = 0
         self.active = 0
         self.offset = 0
-        self.receivers = 0
+        self.receivers = 2
         self.config = np.zeros(10, np.uint32)
         self.status = np.zeros(1, np.uint32)
+        self.rates = self.config[1:2].view(np.uint16)
         # create controls
         self.startButton.clicked.connect(self.start)
         for i in range(8):
@@ -138,9 +139,11 @@ class Server(QMainWindow, Ui_Server):
             self.port = port
             self.active = 1
             self.offset = 0
-            self.receivers = 0
+            self.receivers = 2
             self.config.fill(0)
-            self.config[1] = 2560
+            self.rates[0] = 2560
+            self.rates[1] = 2
+            self.send_ctrl()
             self.reset_fifo()
             self.dataTimer.start(5)
             self.ctrlTimer.start(100)
@@ -153,10 +156,13 @@ class Server(QMainWindow, Ui_Server):
             value = ((data[4] >> 3) & 7) + 1
             if self.receivers != value:
                 self.receivers = value
+                self.rates[1] = (value + 1) // 2 * 3 - 1
+                self.send_ctrl()
+                self.reset_fifo()
                 self.logViewer.appendPlainText("number of receivers: %d" % value)
             value = self.rate_map[data[1] & 3]
-            if self.config[1] != value:
-                self.config[1] = value
+            if self.rates[0] != value:
+                self.rates[0] = value
                 rate = 61440 // value
                 self.logViewer.appendPlainText("sample rate: %d kS/s" % rate)
         elif 4 <= code <= 17:
@@ -209,11 +215,14 @@ class Server(QMainWindow, Ui_Server):
             return
 
         m = cntr // (n * 2)
+        s = (self.rates[1] + 1) * 4
+        sn = s * n
+        sizen = size * n
 
         if m < 1:
             return
 
-        view = self.samples[: m * n * 96]
+        view = self.samples[: m * sn * 2]
 
         try:
             self.io.read(view, 2, 0)
@@ -228,28 +237,28 @@ class Server(QMainWindow, Ui_Server):
         self.buffer[4:8] = np.flip(self.counter)
 
         offset = 0
-        src_idxs = np.mod(np.arange(48 * n), 48) < size - 2
-        dst_idxs = np.mod(np.arange(size * n), size) < size - 2
+        src_idxs = np.mod(np.arange(sn), s) < size - 2
+        dst_idxs = np.mod(np.arange(sizen), size) < size - 2
         for i in range(m):
             self.buffer[8:16] = self.header[self.offset]
             self.offset += 1
             if self.offset > 4:
                 self.offset = 0
 
-            src = self.samples[offset : offset + 48 * n]
-            dst = self.buffer[16 : 16 + size * n]
+            src = self.samples[offset : offset + sn]
+            dst = self.buffer[16 : 16 + sizen]
             dst[dst_idxs] = src[src_idxs]
-            offset += 48 * n
+            offset += sn
 
             self.buffer[520:528] = self.header[self.offset]
             self.offset += 1
             if self.offset > 4:
                 self.offset = 0
 
-            src = self.samples[offset : offset + 48 * n]
-            dst = self.buffer[528 : 528 + size * n]
+            src = self.samples[offset : offset + sn]
+            dst = self.buffer[528 : 528 + sizen]
             dst[dst_idxs] = src[src_idxs]
-            offset += 48 * n
+            offset += sn
 
             self.socket.writeDatagram(self.buffer.tobytes(), self.addr, self.port)
 
