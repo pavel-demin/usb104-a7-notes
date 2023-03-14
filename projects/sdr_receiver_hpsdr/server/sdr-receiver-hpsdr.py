@@ -228,8 +228,8 @@ class Server(QMainWindow, Ui_Server):
         self.buffer[4:8] = np.flip(self.counter)
 
         offset = 0
-        src_slice = np.mod(np.arange(48 * n), 48) < size - 2
-        dst_slice = np.mod(np.arange(size * n), size) < size - 2
+        src_idxs = np.mod(np.arange(48 * n), 48) < size - 2
+        dst_idxs = np.mod(np.arange(size * n), size) < size - 2
         for i in range(m):
             self.buffer[8:16] = self.header[self.offset]
             self.offset += 1
@@ -238,7 +238,7 @@ class Server(QMainWindow, Ui_Server):
 
             src = self.samples[offset : offset + 48 * n]
             dst = self.buffer[16 : 16 + size * n]
-            dst[dst_slice] = src[src_slice]
+            dst[dst_idxs] = src[src_idxs]
             offset += 48 * n
 
             self.buffer[520:528] = self.header[self.offset]
@@ -248,7 +248,7 @@ class Server(QMainWindow, Ui_Server):
 
             src = self.samples[offset : offset + 48 * n]
             dst = self.buffer[528 : 528 + size * n]
-            dst[dst_slice] = src[src_slice]
+            dst[dst_idxs] = src[src_idxs]
             offset += 48 * n
 
             self.socket.writeDatagram(self.buffer.tobytes(), self.addr, self.port)
