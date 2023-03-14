@@ -5,17 +5,17 @@ R <- 160                       # Decimation factor
 M <- 1                         # Differential delay
 N <- 6                         # Number of stages
 
-Fo <- 0.238                    # Pass band edge
+Fo <- 0.22                     # Pass band edge
 
 # fir2 parameters
-k <- kaiserord(c(Fo, Fo+0.008), c(1, 0), 1/(2^16), 1)
+k <- kaiserord(c(Fo, Fo+0.02), c(1, 0), 1/(2^16), 1)
 L <- k$n                       # Filter order
 Beta <- k$beta                 # Kaiser window parameter
 
 # FIR filter design using fir2
 s <- 0.001                     # Step size
 fp <- seq(0.0, Fo, by=s)       # Pass band frequency samples
-fs <- seq(Fo+0.008, 0.5, by=s) # Stop band frequency samples
+fs <- seq(Fo+0.02, 0.5, by=s)  # Stop band frequency samples
 f <- c(fp, fs)*2               # Normalized frequency samples; 0<=f<=1
 
 Mp <- matrix(1, 1, length(fp)) # Pass band response; Mp[1]=1

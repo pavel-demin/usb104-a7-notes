@@ -47,7 +47,7 @@ class Server(QMainWindow, Ui_Server):
         super(Server, self).__init__()
         self.setupUi(self)
         # initialize variables
-        self.samples = np.zeros(48 * 4096, np.uint8)
+        self.samples = np.zeros(48 * 8192, np.uint8)
         self.buffer = np.zeros(1032, np.uint8)
         self.counter = np.zeros(4, np.uint8)
         self.socket = None
@@ -209,7 +209,7 @@ class Server(QMainWindow, Ui_Server):
             return
 
         cntr = self.status[0]
-        if cntr >= 4096:
+        if cntr >= 8192:
             self.logViewer.appendPlainText("FIFO buffer overflow")
             self.reset_fifo()
             return
