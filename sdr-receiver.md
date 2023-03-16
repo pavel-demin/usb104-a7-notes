@@ -64,7 +64,7 @@ sudo apt-get install gnuradio python3-usb1
 {% endhighlight %}
  - Install [pyhubio](https://github.com/pavel-demin/pyhubio):
 {% highlight bash %}
-pip install https://github.com/pavel-demin/pyhubio/archive/master.zip
+pip install pyhubio
 {% endhighlight %}
  - Clone the source code repository:
 {% highlight bash %}
