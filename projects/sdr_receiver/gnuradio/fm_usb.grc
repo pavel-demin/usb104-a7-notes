@@ -204,7 +204,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '16'
+    decim: rx_rate//48000
     fbw: '0'
     interp: '1'
     maxoutbuf: '0'
