@@ -17,7 +17,8 @@ Ui_Server, QMainWindow = loadUiType("sdr-receiver.ui")
 
 
 class Window(QMainWindow, Ui_Server):
-    update = Signal(object)
+    bitstream = "sdr_receiver.bit"
+    update_config = Signal(object)
 
     def __init__(self):
         super(Window, self).__init__()
@@ -28,14 +29,15 @@ class Window(QMainWindow, Ui_Server):
         self.server.moveToThread(self.thread)
         self.thread.started.connect(self.server.start)
         self.thread.finished.connect(self.server.stop)
-        self.server.started.connect(self.started)
         self.server.stopped.connect(self.stop)
-        self.server.print.connect(self.logViewer.appendPlainText)
-        self.update.connect(self.server.update_config)
+        self.server.print.connect(self.print)
+        self.update_config.connect(self.server.update_config)
         # create controls
         self.startButton.clicked.connect(self.start)
         self.inputBox.addItems(["CH1", "CH2"])
         self.inputBox.currentIndexChanged.connect(self.server.update_input)
+        # create JTAG
+        self.jtag = PyhubJTAG()
         # create control socket
         context = zmq.Context()
         self.ctrlSocket = context.socket(zmq.SUB)
@@ -43,32 +45,36 @@ class Window(QMainWindow, Ui_Server):
         self.ctrlNotifier = QSocketNotifier(fd, QSocketNotifier.Read, self)
         self.ctrlNotifier.activated.connect(self.read_ctrl)
 
+    def print(self, text):
+        self.logViewer.appendPlainText(text)
+
     def start(self):
+        try:
+            self.jtag.program(self.bitstream)
+        except:
+            self.print("error: %s" % sys.exc_info()[1])
+            return
+        self.print("FPGA configured")
+        time.sleep(0.1)
         self.ctrlSocket.connect("tcp://127.0.0.1:10002")
         self.ctrlSocket.setsockopt(zmq.SUBSCRIBE, b"")
-        self.server.stopped.disconnect()
-        self.server.stopped.connect(self.stop)
         self.thread.start()
-
-    def started(self):
         self.startButton.setText("Stop")
         self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.stop)
+        self.print("server started")
 
     def stop(self):
         try:
             self.ctrlSocket.disconnect("tcp://127.0.0.1:10002")
         except:
             pass
-        self.server.stopped.disconnect()
-        self.server.stopped.connect(self.stopped)
         self.thread.quit()
         self.thread.wait()
-
-    def stopped(self):
         self.startButton.setText("Start")
         self.startButton.clicked.disconnect()
         self.startButton.clicked.connect(self.start)
+        self.print("server stopped")
 
     def closeEvent(self, event):
         self.stop()
@@ -83,12 +89,11 @@ class Window(QMainWindow, Ui_Server):
             flags = self.ctrlSocket.getsockopt(zmq.EVENTS)
         if buffer and len(buffer) == 8:
             data = np.frombuffer(buffer, np.uint32)
-            self.update.emit(data)
+            self.update_config.emit(data)
         self.ctrlNotifier.setEnabled(True)
 
 
 class Server(QObject):
-    bitstream = "sdr_receiver.bit"
     rate_map = {
         24000: 2560,
         48000: 1280,
@@ -110,7 +115,6 @@ class Server(QObject):
         0x000500,
         0x002A00,
     ]
-    started = Signal()
     stopped = Signal()
     print = Signal(str)
 
@@ -121,7 +125,6 @@ class Server(QObject):
         self.config = np.zeros(4, np.uint32)
         self.status = np.zeros(1, np.uint32)
         # create IO
-        self.jtag = PyhubJTAG()
         self.io = PyhubIO()
         # create data socket
         context = zmq.Context()
@@ -135,14 +138,6 @@ class Server(QObject):
 
     def start(self):
         try:
-            self.jtag.program(self.bitstream)
-        except:
-            self.print.emit("error: %s" % sys.exc_info()[1])
-            self.stopped.emit()
-            return
-        self.print.emit("FPGA configured")
-        time.sleep(0.1)
-        try:
             self.io.start()
             self.io.flush()
             self.io.write(np.uint32(self.adc_cfg), 2, 0)
@@ -155,15 +150,11 @@ class Server(QObject):
         self.reset_fifo()
         self.dataTimer.start(1)
         self.ctrlTimer.start(100)
-        self.print.emit("server started")
-        self.started.emit()
 
     def stop(self):
         self.dataTimer.stop()
         self.ctrlTimer.stop()
         self.io.stop()
-        self.print.emit("server stopped")
-        self.stopped.emit()
 
     def update_config(self, data):
         rate = data[0]
