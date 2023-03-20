@@ -15,10 +15,9 @@ Hardware
 -----
 
 The implementation of the SDR receiver is quite straightforward:
-
- - An antenna is connected to one of the inputs of the Zmod Digitizer module.
- - The on-board ADC (122.88 MS/s sampling frequency, 14-bit resolution) digitizes the RF signal from the antenna.
- - The data coming from the ADC is processed by a in-phase/quadrature (I/Q) digital down-converter (DDC) running on the FPGA.
+- An antenna is connected to one of the inputs of the Zmod Digitizer module
+- The on-board ADC (122.88 MS/s sampling frequency, 14-bit resolution) digitizes the RF signal from the antenna
+- The data coming from the ADC is processed by a in-phase/quadrature (I/Q) digital down-converter (DDC) running on the FPGA
 
 The tunable frequency range covers from 0 Hz to 122.88 MHz.
 
@@ -44,38 +43,38 @@ The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index
 Getting started with GNU Radio on Windows
 -----
 
- - Connect an antenna to the CH1 connector of the Zmod Digitizer module.
- - Connect the USB104 A7 board to a USB port.
- - Download and unpack the [release zip file]({{ site.release-file }}).
- - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
- - Run the `sdr-receiver.exe` program.
- - Press the Start button.
- - Download and install [radioconda](https://github.com/ryanvolz/radioconda).
- - Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_zmq.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_zmq.grc)).
+- Connect an antenna to the CH1 connector of the Zmod Digitizer module
+- Connect the USB104 A7 board to a USB port
+- Download and unpack the [release zip file]({{ site.release-file }})
+- Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
+- Run the `sdr-receiver.exe` program
+- Press the Start button
+- Download and install [radioconda](https://github.com/ryanvolz/radioconda)
+- Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_zmq.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_zmq.grc))
 
 Getting started with GNU Radio on Linux
 -----
 
- - Connect an antenna to the CH1 connector of the Zmod Digitizer module.
- - Connect the USB104 A7 board to a USB port.
- - Install [GNU Radio](http://gnuradio.org) and [python3-libusb1](https://github.com/vpelletier/python-libusb1):
+- Connect an antenna to the CH1 connector of the Zmod Digitizer module
+- Connect the USB104 A7 board to a USB port
+- Install [GNU Radio](http://gnuradio.org) and [python3-libusb1](https://github.com/vpelletier/python-libusb1):
 {% highlight bash %}
 sudo apt-get install gnuradio python3-usb1
 {% endhighlight %}
- - Install [pyhubio](https://github.com/pavel-demin/pyhubio):
+- Install [pyhubio](https://github.com/pavel-demin/pyhubio):
 {% highlight bash %}
 pip install pyhubio
 {% endhighlight %}
- - Clone the source code repository:
+- Clone the source code repository:
 {% highlight bash %}
 git clone https://github.com/pavel-demin/usb104-a7-notes
 cd usb104-a7-notes
 {% endhighlight %}
- - Build the `sdr_receiver.bit` bitstream file for FPGA configuration:
+- Build the `sdr_receiver.bit` bitstream file for FPGA configuration:
 {% highlight bash %}
 make NAME=sdr_receiver bit
 {% endhighlight %}
- - Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_usb.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_usb.grc)):
+- Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_usb.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_usb.grc)):
 {% highlight bash %}
 cp tmp/sdr_receiver.bit projects/sdr_receiver/gnuradio
 cd projects/sdr_receiver/gnuradio

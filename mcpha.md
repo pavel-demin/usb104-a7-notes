@@ -8,16 +8,11 @@ Interesting links
 -----
 
 Some interesting links on radiation spectroscopy:
-
- - [Digital signal processing for BGO detectors](https://doi.org/10.1016/0168-9002(93)91105-V)
-
- - [Digital gamma-ray spectroscopy based on FPGA technology](https://doi.org/10.1016/S0168-9002(01)01925-8)
-
- - [Digital signal processing for segmented HPGe detectors](https://archiv.ub.uni-heidelberg.de/volltextserver/4991)
-
- - [FPGA-based algorithms for the stability improvement of high-flux X-ray spectrometric imaging detectors](https://tel.archives-ouvertes.fr/tel-02096235)
-
- - [Spectrum Analysis Introduction](http://www.canberra.com/literature/fundamental-principles/pdf/Spectrum-Analysis.pdf)
+- [Digital signal processing for BGO detectors](https://doi.org/10.1016/0168-9002(93)91105-V)
+- [Digital gamma-ray spectroscopy based on FPGA technology](https://doi.org/10.1016/S0168-9002(01)01925-8)
+- [Digital signal processing for segmented HPGe detectors](https://archiv.ub.uni-heidelberg.de/volltextserver/4991)
+- [FPGA-based algorithms for the stability improvement of high-flux X-ray spectrometric imaging detectors](https://tel.archives-ouvertes.fr/tel-02096235)
+- [Spectrum Analysis Introduction](http://www.canberra.com/literature/fundamental-principles/pdf/Spectrum-Analysis.pdf)
 
 Hardware
 -----
@@ -50,15 +45,15 @@ The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/mast
 Getting started
 -----
 
- - Connect a signal source to the CH1 or CH2 connector of the Zmod Digitizer module.
- - Connect the USB104 A7 board to a USB port.
- - Download and unpack the [release zip file]({{ site.release-file }}).
- - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
- - Run the `mcpha.exe` program.
- - Press the Start button in the upper left corner.
- - Select the Spectrum histogram 1 or Spectrum histogram 2 tab.
- - Set the amplitude threshold and exposure time.
- - Press the Start button on the Spectrum histogram tab.
+- Connect a signal source to the CH1 or CH2 connector of the Zmod Digitizer module
+- Connect the USB104 A7 board to a USB port
+- Download and unpack the [release zip file]({{ site.release-file }})
+- Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
+- Run the `mcpha.exe` program
+- Press the Start button in the upper left corner
+- Select the Spectrum histogram 1 or Spectrum histogram 2 tab
+- Set the amplitude threshold and exposure time
+- Press the Start button on the Spectrum histogram tab
 
 Building from source
 -----

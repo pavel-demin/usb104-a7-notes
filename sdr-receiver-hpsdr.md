@@ -10,9 +10,7 @@ Introduction
 This SDR receiver emulates a [Hermes](https://openhpsdr.org/hermes.php) module with eight receivers. It may be useful for projects that require eight receivers compatible with the programs that support the HPSDR/Metis communication protocol.
 
 The HPSDR/Metis communication protocol is described in the following documents:
-
  - [Metis - How it works](https://github.com/TAPR/OpenHPSDR-SVN/raw/master/Metis/Documentation/Metis- How it works_V1.33.pdf)
-
  - [HPSDR - USB Data Protocol](https://github.com/TAPR/OpenHPSDR-SVN/raw/master/Documentation/USB_protocol_V1.58.doc)
 
 This application requires the Zmod Digitizer module to be connected to the ZMOD A connector of the USB104 A7 board.
@@ -38,9 +36,7 @@ Software
 The [projects/sdr_receiver_hpsdr/server](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver_hpsdr/server) directory contains the source code of the UDP server ([sdr-receiver-hpsdr.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver_hpsdr/server/sdr-receiver-hpsdr.py)) that receives control commands and transmits the I/Q data streams to the SDR programs.
 
 This SDR receiver should work with the programs that support the HPSDR/Metis communication protocol. It was tested with the following programs:
-
  - [CW Skimmer Server](https://dxatlas.com/skimserver)
-
  - [extio-iw0hdv](https://github.com/IW0HDV/extio-iw0hdv/releases/tag/v1.0.5) and [SDR#](https://www.dropbox.com/sh/5fy49wae6xwxa8a/AAAdAcU238cppWziK4xPRIADa/sdr/sdrsharp_v1.0.0.1361_with_plugins.zip?dl=1)
 
 ![Skimmer Server]({{ "/img/skimmer-server.png" | prepend: site.baseurl }})

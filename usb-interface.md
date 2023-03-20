@@ -12,11 +12,10 @@ All applications in this repository have a structure similar to the one shown in
 ![Application structure]({{ "/img/application-structure.png" | prepend: site.baseurl }})
 
 To control, monitor and communicate with all parts of the applications, the following items are required:
-
- - configuration registers
- - status registers
- - AXI4-Stream ports
- - BRAM ports
+- configuration registers
+- status registers
+- AXI4-Stream ports
+- BRAM ports
 
 USB interface
 -----
@@ -84,7 +83,5 @@ A basic project with the USB interface connected to the ADC interface via an int
 This template project can be used as a starting point for projects requiring ADC and USB interface. The Tcl code of this project can be found in [projects/template](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/template).
 
 The code for other projects using this USB interface can be found at the following links:
-
- - [Test hub](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/test_hub)
-
- - [SDR receiver](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver)
+- [Test hub](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/test_hub)
+- [SDR receiver](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver)
