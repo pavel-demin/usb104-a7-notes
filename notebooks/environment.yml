@@ -6,6 +6,7 @@ channels:
 dependencies:
   - ipykernel
   - matplotlib
+  - libusb1
   - pip
   - pip:
     - pyhubio
