@@ -1,10 +1,17 @@
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
 
-#### clock input
+### clock input
 
 set_property IOSTANDARD LVCMOS33 [get_ports clk_i]
 set_property PACKAGE_PIN E3 [get_ports clk_i]
+
+### buttons
+
+set_property IOSTANDARD LVCMOS33 [get_ports {btn_i[*]}]
+
+set_property PACKAGE_PIN V16 [get_ports {btn_i[0]}]
+set_property PACKAGE_PIN U17 [get_ports {btn_i[1]}]
 
 ### LED
 

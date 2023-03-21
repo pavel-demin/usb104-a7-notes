@@ -2,6 +2,10 @@
 
 create_bd_port -dir I clk_i
 
+### buttons
+
+create_bd_port -dir I -from 1 -to 0 btn_i
+
 ### LED
 
 create_bd_port -dir O -from 3 -to 0 led_o
