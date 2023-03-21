@@ -1,0 +1,11 @@
+name: usb104-a7-notes
+
+channels:
+  - conda-forge
+
+dependencies:
+  - ipykernel
+  - matplotlib
+  - pip
+  - pip:
+    - pyhubio
