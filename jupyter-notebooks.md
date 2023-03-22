@@ -7,8 +7,6 @@ permalink: /jupyter-notebooks/
 Introduction
 -----
 
-The [pyhubio](https://github.com/pavel-demin/pyhubio) library allows to program the FPGA and to communicate with the [USB interface]({{ "/usb-interface/" | prepend: site.baseurl }}) to communicate with configuration registers, status registers, AXI4-Stream and BRAM ports inside the FPGA using Python.
-
 The combination of Jupyter notebooks, [pyhubio](https://github.com/pavel-demin/pyhubio) library and [USB interface]({{ "/usb-interface/" | prepend: site.baseurl }}) allows interactive communication with all parts of the FPGA configuration, input and output data visualization, making testing and prototyping more dynamic.
 
 The [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory contains a few examples of Jupyter notebooks.
