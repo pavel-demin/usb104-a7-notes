@@ -14,20 +14,20 @@ All applications in this repository have a structure similar to the one shown in
 To control, monitor and communicate with all parts of the applications, the following items are required:
 - configuration registers
 - status registers
-- AXI4-Stream ports
-- BRAM ports
+- AXI4-Stream interfaces
+- BRAM interfaces
 
 USB interface
 -----
 
-The USB interface consists of two 4 KB FIFO buffers and two AXI4-Stream ports. One of the FIFO buffers is used for data received from the computer and the other FIFO buffer is used for data to be sent to the computer.
+The USB interface consists of two 4 KB FIFO buffers and two AXI4-Stream interfaces. One of the FIFO buffers is used for data received from the computer and the other FIFO buffer is used for data to be sent to the computer.
 
 The corresponding Verilog code can be found in [cores/axis_usb_v1_0/axis_usb.v](https://github.com/pavel-demin/usb104-a7-notes/blob/master/cores/axis_usb_v1_0/axis_usb.v).
 
 Hub interface
 -----
 
-The hub interface consists of two AXI4-Stream ports used to communicate with the USB interface and all other required registers and ports connected to different parts of the applications.
+The hub interface consists of two AXI4-Stream interfaces used to communicate with the USB interface and all other required registers and interfaces connected to different parts of the applications.
 
 The corresponding Verilog code can be found in [cores/axis_hub_v1_0/axis_hub.v](https://github.com/pavel-demin/usb104-a7-notes/blob/master/cores/axis_hub_v1_0/axis_hub.v).
 
@@ -51,25 +51,25 @@ If the write/read# bit is 0, then no data is expected. Instead, the number of 32
 
 The hub address is used to select one of the hub ports:
 
-port            | hub address
+hub port        | hub address
 --------------- | -----------
 config register | 0
 status register | 1
-port 0          | 2
-port 1          | 3
-port 2          | 4
-port 3          | 5
-port 4          | 6
-port 5          | 7
+interface 0     | 2
+interface 1     | 3
+interface 2     | 4
+interface 3     | 5
+interface 4     | 6
+interface 5     | 7
 
-The port address is used to communicate with the configuration registers, status registers and BRAM modules connected to the BRAM ports.
+The port address is used to communicate with the configuration registers, status registers and BRAM modules connected to the BRAM interfaces.
 
 The data sent from the USB interface to the computer consist of a number of 32-bit data words corresponding to the burst length in the commands with the write/read# bit set to 0.
 
 Software
 -----
 
-A Python library based on [python-libusb1](https://github.com/vpelletier/python-libusb1) is used to communicate with configuration registers, status registers, AXI4-Stream and BRAM ports.
+A Python library based on [python-libusb1](https://github.com/vpelletier/python-libusb1) is used to communicate with configuration registers, status registers, AXI4-Stream and BRAM interfaces.
 
 The Python code of this library can be found in [pyhubio](https://github.com/pavel-demin/pyhubio).
 
