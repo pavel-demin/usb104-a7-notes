@@ -1,10 +1,9 @@
 set cores [list \
-  axis_bram_writer_v1_0 axis_constant_v1_0 axis_counter_v1_0 \
-  axis_downsizer_v1_0 axis_fifo_v2_0 axis_histogram_v1_0 axis_hub_v1_0 \
-  axis_negator_v1_0 axis_oscilloscope_v1_0 axis_pulse_height_analyzer_v1_0 \
-  axis_selector_v1_0 axis_spi_v1_0 axis_timer_v1_0 axis_trigger_v1_0 \
-  axis_usb_v1_0 axis_validator_v1_0 axis_variable_v1_0 axis_zmod_adc_v1_0 \
-  cdce_gpio_v1_0 cdce_iic_v1_0 dsp48_v1_0 port_selector_v1_0 port_slicer_v1_0 \
+  axis_bram_writer axis_constant axis_counter axis_downsizer axis_fifo \
+  axis_histogram axis_hub axis_negator axis_oscilloscope \
+  axis_pulse_height_analyzer axis_selector axis_spi axis_timer axis_trigger \
+  axis_usb axis_validator axis_variable axis_zmod_adc cdce_gpio cdce_iic dsp48 \
+  port_selector port_slicer \
 ]
 
 set part_name xc7a100tcsg324-1
