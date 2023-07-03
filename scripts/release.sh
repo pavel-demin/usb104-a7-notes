@@ -52,7 +52,7 @@ dir=$tag/playground
 cp -a cfg $dir
 cp -a tmp/cores $dir
 rm -rf $dir/cores/*.*
-cp -a cores/common_modules $dir/cores
+cp -a modules $dir
 cp -a tmp/playground.gen $dir
 cp -a tmp/playground.ip_user_files $dir
 cp -a tmp/playground.srcs $dir
@@ -64,7 +64,7 @@ dir=$tag/template
 cp -a cfg $dir
 cp -a tmp/cores $dir
 rm -rf $dir/cores/*.*
-cp -a cores/common_modules $dir/cores
+cp -a modules $dir
 cp -a tmp/template.gen $dir
 cp -a tmp/template.ip_user_files $dir
 cp -a tmp/template.srcs $dir
