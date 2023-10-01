@@ -9,6 +9,8 @@ import numpy as np
 
 from pyhubio import PyhubIO, PyhubJTAG
 
+import matplotlib
+
 from matplotlib.figure import Figure
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -60,7 +62,7 @@ class MCPHA(QMainWindow, Ui_MCPHA):
         self.tabWidget.addTab(self.hst1, "Spectrum histogram 1")
         self.tabWidget.addTab(self.hst2, "Spectrum histogram 2")
         self.tabWidget.addTab(self.osc, "Oscilloscope")
-        # confgigure controls
+        # configure controls
         self.startButton.clicked.connect(self.start)
         self.neg1Check.toggled.connect(partial(self.set_negator, 0))
         self.neg2Check.toggled.connect(partial(self.set_negator, 1))
@@ -318,6 +320,7 @@ class HstDisplay(QWidget, Ui_HstDisplay):
     def start(self):
         if self.mcpha.idle:
             return
+        self.set_thresholds(self.thrsCheck.isChecked())
         self.set_enable(False)
         h = self.hoursValue.value()
         m = self.minutesValue.value()
@@ -411,10 +414,10 @@ class HstDisplay(QWidget, Ui_HstDisplay):
         sum = self.buffer.sum()
         self.totalValue.setText("%.2e" % sum)
         if value > self.time[1]:
-            rate = (sum - self.sum) / (value - self.time[1]) * 1e8
+            rate = (sum - self.sum) / (value - self.time[1]) * 100e6
             self.instValue.setText("%.2e" % rate)
         if value > 0:
-            rate = sum / value * 1e8
+            rate = sum / value * 100e6
             self.avgValue.setText("%.2e" % rate)
         self.sum = sum
         self.time[1] = value
@@ -593,6 +596,8 @@ class OscDisplay(QWidget, Ui_OscDisplay):
 
 
 app = QApplication(sys.argv)
+dpi = app.primaryScreen().logicalDotsPerInch()
+matplotlib.rcParams["figure.dpi"] = dpi
 window = MCPHA()
 window.show()
 sys.exit(app.exec_())

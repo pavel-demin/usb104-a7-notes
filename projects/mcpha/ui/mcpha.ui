@@ -112,7 +112,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="tabPosition">
-       <enum>QTabWidget::West</enum>
+       <enum>QTabWidget::South</enum>
       </property>
      </widget>
     </item>
