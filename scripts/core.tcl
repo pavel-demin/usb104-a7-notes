@@ -7,7 +7,7 @@ file delete -force tmp/cores/$core_name tmp/cores/$core_name.cache tmp/cores/$co
 
 create_project -part $part_name $core_name tmp/cores
 
-add_files -norecurse [glob cores/$core_name.v]
+add_files -norecurse cores/$core_name.v
 
 ipx::package_project -import_files -root_dir tmp/cores/$core_name
 
