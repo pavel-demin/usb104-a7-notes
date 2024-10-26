@@ -1,7 +1,6 @@
 ---
 layout: page
 title: USB interface
-permalink: /usb-interface/
 ---
 
 Requirements
@@ -9,7 +8,7 @@ Requirements
 
 All applications in this repository have a structure similar to the one shown in the following diagram:
 
-![Application structure]({{ "/img/application-structure.png" | prepend: site.baseurl }})
+![Application structure]({% link img/application-structure.png %})
 
 To control, monitor and communicate with all parts of the applications, the following items are required:
 - configuration registers
@@ -78,7 +77,7 @@ Usage examples
 
 A basic project with the USB interface connected to the ADC interface via an intermediate FIFO buffer is shown in the following diagram:
 
-![Template project]({{ "/img/template-project.png" | prepend: site.baseurl }})
+![Template project]({% link img/template-project.png %})
 
 This template project can be used as a starting point for projects requiring ADC and USB interface. The Tcl code of this project can be found in [projects/template](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/template).
 

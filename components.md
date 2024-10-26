@@ -1,7 +1,6 @@
 ---
 layout: page
 title: List of components
-permalink: /components/
 ---
 
 The following is a list of components that can be used with the USB104 A7 board and the Zmod Digitizer module.

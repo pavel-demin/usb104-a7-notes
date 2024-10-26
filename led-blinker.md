@@ -1,7 +1,6 @@
 ---
 layout: page
 title: LED blinker
-permalink: /led-blinker/
 ---
 
 Introduction

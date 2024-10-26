@@ -1,7 +1,6 @@
 ---
 layout: page
 title: SDR receiver compatible with HPSDR
-permalink: /sdr-receiver-hpsdr/
 ---
 
 Introduction
@@ -20,7 +19,7 @@ Hardware
 
 The FPGA configuration consists of eight identical digital down-converters (DDC). Their structure is shown in the following diagram:
 
-![HPSDR receiver]({{ "/img/sdr-receiver-hpsdr.png" | prepend: site.baseurl }})
+![HPSDR receiver]({% link img/sdr-receiver-hpsdr.png %})
 
 The I/Q data rate is configurable and four settings are available: 48, 96, 192, 384 kSPS.
 
@@ -39,7 +38,7 @@ This SDR receiver should work with the programs that support the HPSDR/Metis com
  - [CW Skimmer Server](https://dxatlas.com/skimserver)
  - [extio-iw0hdv](https://github.com/IW0HDV/extio-iw0hdv/releases/tag/v1.0.5) and [SDR#](https://www.dropbox.com/sh/5fy49wae6xwxa8a/AAAdAcU238cppWziK4xPRIADa/sdr/sdrsharp_v1.0.0.1361_with_plugins.zip?dl=1)
 
-![Skimmer Server]({{ "/img/skimmer-server.png" | prepend: site.baseurl }})
+![Skimmer Server]({% link img/skimmer-server.png %})
 
 Getting started
 -----
@@ -63,7 +62,7 @@ Running CW Skimmer Server and Reverse Beacon Network Aggregator
 Building from source
 -----
 
-The structure of the source code and of the development chain is described at [this link]({{ "/led-blinker/" | prepend: site.baseurl }}).
+The structure of the source code and of the development chain is described at [this link]({% link led-blinker.md %}).
 
 Setting up the Vitis and Vivado environment:
 {% highlight bash %}

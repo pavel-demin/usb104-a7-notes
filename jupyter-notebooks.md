@@ -1,17 +1,16 @@
 ---
 layout: page
 title: Jupyter notebooks
-permalink: /jupyter-notebooks/
 ---
 
 Introduction
 -----
 
-The combination of Jupyter notebooks, the [pyhubio](https://github.com/pavel-demin/pyhubio) library and the [USB interface]({{ "/usb-interface/" | prepend: site.baseurl }}) allows interactive communication with all parts of the FPGA configuration and visualization of input and output data, making testing and prototyping more dynamic.
+The combination of Jupyter notebooks, the [pyhubio](https://github.com/pavel-demin/pyhubio) library and the [USB interface]({% link usb-interface.md %}) allows interactive communication with all parts of the FPGA configuration and visualization of input and output data, making testing and prototyping more dynamic.
 
 The [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory contains a few examples of Jupyter notebooks.
 
-![Jupyter notebooks]({{ "/img/jupyter-notebooks.png" | prepend: site.baseurl }})
+![Jupyter notebooks]({% link img/jupyter-notebooks.png %})
 
 Getting started
 -----

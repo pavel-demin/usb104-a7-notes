@@ -1,7 +1,6 @@
 ---
 layout: page
 title: SDR receiver
-permalink: /sdr-receiver/
 ---
 
 Introduction
@@ -25,7 +24,7 @@ The I/Q data rate is configurable and five settings are available: 24, 48, 96, 1
 
 The basic blocks of the digital down-converter (DDC) are shown in the following diagram:
 
-![SDR receiver]({{ "/img/sdr-receiver.png" | prepend: site.baseurl }})
+![SDR receiver]({% link img/sdr-receiver.png %})
 
 The [projects/sdr_receiver](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver) directory contains two Tcl files: [block_design.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/block_design.tcl), [rx.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/rx.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
 
@@ -38,7 +37,7 @@ The [projects/sdr_receiver/gnuradio](https://github.com/pavel-demin/usb104-a7-no
 
 The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) running the FM receiver flow graph ([fm_zmq.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_zmq.grc)) and communicating with the ZMQ server ([sdr-receiver.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/server/sdr-receiver.py)).
 
-![GNU Radio Companion]({{ "/img/sdr-receiver-fm-zmq.png" | prepend: site.baseurl }})
+![GNU Radio Companion]({% link img/sdr-receiver-fm-zmq.png %})
 
 Getting started with GNU Radio on Windows
 -----
@@ -85,7 +84,7 @@ gnuradio-companion fm_usb.grc
 Building from source
 -----
 
-The structure of the source code and of the development chain is described at [this link]({{ "/led-blinker/" | prepend: site.baseurl }}).
+The structure of the source code and of the development chain is described at [this link]({% link led-blinker.md %}).
 
 Setting up the Vitis and Vivado environment:
 {% highlight bash %}

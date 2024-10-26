@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Links
-permalink: /links/
 ---
 
 - [Digilent documentation for USB104 A7](https://digilent.com/reference/programmable-logic/usb104a7/start)

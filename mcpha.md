@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Multichannel Pulse Height Analyzer
-permalink: /mcpha/
 ---
 
 Interesting links
@@ -23,7 +22,7 @@ This system is designed to analyze the height of Gaussian-shaped pulses and it e
 
 The basic blocks of the system are shown in the following diagram:
 
-![Multichannel Pulse Height Analyzer]({{ "/img/mcpha.png" | prepend: site.baseurl }})
+![Multichannel Pulse Height Analyzer]({% link img/mcpha.png %})
 
 The width of the pulse at the input of the pulse height analyzer module can be adjusted by varying the decimation factor of the CIC filter.
 
@@ -40,7 +39,7 @@ Software
 
 The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/mcpha/ui) directory contains the source code of the control program ([mcpha.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/ui/mcpha.py)).
 
-![MCPHA control program]({{ "/img/mcpha-ui.png" | prepend: site.baseurl }})
+![MCPHA control program]({% link img/mcpha-ui.png %})
 
 Getting started
 -----
@@ -58,7 +57,7 @@ Getting started
 Building from source
 -----
 
-The structure of the source code and of the development chain is described at [this link]({{ "/led-blinker/" | prepend: site.baseurl }}).
+The structure of the source code and of the development chain is described at [this link]({% link led-blinker.md %}).
 
 Setting up the Vitis and Vivado environment:
 {% highlight bash %}
