@@ -11,11 +11,11 @@ th { text-align: left; background-color: #f5f5f5; }
 tr.even td { background-color: #f5f5f5; }
 img { max-width: 100%; }
 
-#header { color: #bf2334; padding: 0 1em; }
-#header a { color: #bf2334; text-decoration: none; }
-#logo { margin-bottom: -1.4em; }
-#menu { padding-bottom: 0.3em; text-align: right; }
-#menu a { padding-left: 1em; }
-#content { background-color: #fff; padding: 1em 1em; border-radius: 0.6em; }
+.header { color: #bf2334; padding: 0 1em; }
+.header a { color: #bf2334; text-decoration: none; }
+.logo { margin-bottom: -1.4em; }
+.menu { padding-bottom: 0.3em; text-align: right; }
+.menu a { padding-left: 1em; }
+.content { background-color: #fff; padding: 1em 1em; border-radius: 0.6em; }
 
 @media print { #header { display: none; } }

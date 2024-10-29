@@ -1,21 +1,18 @@
 ---
-layout: page
 title: Jupyter notebooks
 ---
 
-Introduction
------
+## Introduction
 
-The combination of Jupyter notebooks, the [pyhubio](https://github.com/pavel-demin/pyhubio) library and the [USB interface]({% link usb-interface.md %}) allows interactive communication with all parts of the FPGA configuration and visualization of input and output data, making testing and prototyping more dynamic.
+The combination of Jupyter notebooks, the [pyhubio](https://github.com/pavel-demin/pyhubio) library and the [USB interface](/usb-interface.md) allows interactive communication with all parts of the FPGA configuration and visualization of input and output data, making testing and prototyping more dynamic.
 
 The [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory contains a few examples of Jupyter notebooks.
 
-![Jupyter notebooks]({% link img/jupyter-notebooks.png %})
+![Jupyter notebooks](/img/jupyter-notebooks.png)
 
-Getting started
------
+## Getting started
 
-- Download and unpack the [release zip file]({{ site.release-file }})
+- Download and unpack the [release zip file]({{ site.release_file }})
 
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 
@@ -37,8 +34,7 @@ Getting started
   - From the "View" menu select "Command Palette"
   - Type "micromamba create environment"
 
-Working with notebooks
------
+## Working with notebooks
 
 - Open one of the notebooks in Visual Studio Code
 
