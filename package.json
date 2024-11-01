@@ -1,10 +1,18 @@
 {
   "type": "module",
   "scripts": {
+    "format": "npx prettier --write .",
     "start": "npx @11ty/eleventy --serve",
     "build": "npx @11ty/eleventy"
   },
-  "dependencies": {
-    "@11ty/eleventy": "^3.0.0"
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@tailwindcss/typography": "^0.5.15",
+    "autoprefixer": "^10.4.20",
+    "cssnano": "^7.0.6",
+    "postcss": "^8.4.47",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "tailwindcss": "^3.4.14"
   }
 }

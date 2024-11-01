@@ -1,19 +1,41 @@
-body { font-family: Calibri, Verdana, Liberation Sans, DejaVu Sans, sans-serif; background-color: #f5f5f5; max-width: 800px; line-height: 1.4; margin-left: auto; margin-right: auto; padding-bottom: 3em; }
-h1, h2, h3, h4 { font-weight: normal; }
-a { color: #bf2334; text-decoration: none; }
-a:hover { text-decoration: underline; }
-pre, code { font-family: Consolas, Menlo, Liberation Mono, DejaVu Sans Mono, monospace; background: #f5f5f5; border-radius: 0.3em }
-code { padding: 0 0.3em; white-space: nowrap; }
-pre { padding: 0.1em 0.3em; overflow-x: auto; }
-pre > code { padding: 0; background: 0; white-space: pre }
-td, th { border: 1px solid #d3d3d3; padding: 0.1em 0.3em; }
-th { text-align: left; background-color: #f5f5f5; }
-tr.even td { background-color: #f5f5f5; }
-img { max-width: 100%; }
+---
+layout: identity.liquid
+---
 
-.header { display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: 1em; padding: 0 1em 0.3em 1em; }
-.menu { display: flex; flex-wrap: wrap; column-gap: 1em; }
+@tailwind base;
 
-.content { background-color: #fff; padding: 1em 1em; border-radius: 0.6em; }
+body {
+  @apply prose prose-neutral mx-auto bg-neutral-100 pb-8;
+}
 
-@media print { .header { display: none; } }
+pre {
+  @apply overflow-x-auto rounded-md bg-neutral-100 px-2 py-1;
+}
+
+tbody > tr:nth-child(2n),
+thead > tr {
+  @apply bg-neutral-100;
+}
+
+td,
+th {
+  @apply border border-solid border-neutral-300 px-2 py-1;
+}
+
+.content {
+  @apply rounded-lg bg-white px-4 py-8 shadow-md;
+}
+
+.header {
+  @apply flex flex-wrap justify-between gap-x-4 px-4 py-2;
+}
+
+.menu {
+  @apply flex flex-wrap gap-x-4;
+}
+
+@media print {
+  .header {
+    display: none;
+  }
+}
