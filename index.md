@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: default.html
 ---
 
 ![USB104 A7](/img/usb104-a7.png)

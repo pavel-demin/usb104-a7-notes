@@ -2,36 +2,177 @@
 layout: identity.liquid
 ---
 
-@tailwind base;
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  font-family:
+    Calibri,
+    Liberation Sans,
+    DejaVu Sans,
+    sans-serif;
+  text-size-adjust: none;
+}
+
+code,
+pre {
+  font-family:
+    Consolas,
+    Liberation Mono,
+    DejaVu Sans Mono,
+    monospace;
+}
 
 body {
-  @apply prose prose-neutral mx-auto bg-neutral-100 pb-8;
+  line-height: 1.5;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100ch;
+  padding-bottom: 2em;
+}
+
+h1,
+h2 {
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 200%;
+  line-height: 1;
+  margin-top: 2em;
+}
+
+h2 {
+  font-size: 150%;
+  line-height: 1;
+  margin-top: 1.5em;
+}
+
+ol,
+p,
+pre,
+table,
+ul {
+  margin-top: 1em;
+}
+
+ol ol,
+ol ul,
+ul ol,
+ul ul {
+  margin-top: 0;
+}
+
+ol,
+ul {
+  list-style-position: outside;
+  padding: 0;
+  padding-inline-start: 2em;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol > li,
+ul > li {
+  padding: 0;
+  padding-inline-start: 0.25em;
+}
+
+ol > li::marker {
+  color: #808080;
+}
+
+ul > li::marker {
+  color: #a9a9a9;
+}
+
+a {
+  color: #bf2334;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+body,
+code,
+pre,
+tbody tr:nth-child(2n),
+thead tr {
+  background-color: #f5f5f5;
+}
+
+code,
+pre {
+  border-radius: 0.25em;
+}
+
+code {
+  padding: 0.25em 0.25em;
+  white-space: nowrap;
 }
 
 pre {
-  @apply overflow-x-auto rounded-md bg-neutral-100 px-2 py-1;
+  overflow-x: auto;
+  padding: 0.5em 1em;
 }
 
-tbody > tr:nth-child(2n),
-thead > tr {
-  @apply bg-neutral-100;
+pre code {
+  background-color: transparent;
+  padding: 0;
+  white-space: pre;
 }
 
-td,
-th {
-  @apply border border-solid border-neutral-300 px-2 py-1;
+table {
+  border-collapse: collapse;
+}
+
+tbody td,
+thead th {
+  border: 1px solid #d3d3d3;
+  padding: 0.25em 0.5em;
+  text-align: start;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 .content {
-  @apply rounded-lg bg-white px-4 py-8 shadow-md;
+  background-color: #fff;
+  border-radius: 0.5em;
+  padding: 2em 1em;
+}
+
+.content > :first-child {
+  margin-top: 0;
 }
 
 .header {
-  @apply flex flex-wrap justify-between gap-x-4 px-4 py-2;
+  justify-content: space-between;
+  padding: 0.5em 1em;
 }
 
+.header,
 .menu {
-  @apply flex flex-wrap gap-x-4;
+  column-gap: 1em;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 @media print {

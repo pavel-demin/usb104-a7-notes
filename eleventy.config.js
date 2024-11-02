@@ -2,15 +2,12 @@ import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 import { InputPathToUrlTransformPlugin } from "@11ty/eleventy";
 
 import postcss from "postcss";
-import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 
 import site from "./_data/site.js";
-import tailwindConfig from "./tailwind.config.js";
 
 const plugins = [
-  tailwindcss(tailwindConfig),
   autoprefixer(),
   cssnano({
     preset: "default",
@@ -23,7 +20,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
   eleventyConfig.addPlugin(InputPathToUrlTransformPlugin);
 
-  eleventyConfig.addTemplateFormats("css");
+  eleventyConfig.setTemplateFormats(["md", "css"]);
 
   eleventyConfig.addExtension("css", {
     outputFileExtension: "css",
