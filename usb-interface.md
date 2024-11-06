@@ -9,6 +9,7 @@ All applications in this repository have a structure similar to the one shown in
 ![Application structure](/img/application-structure.png)
 
 To control, monitor and communicate with all parts of the applications, the following items are required:
+
 - configuration registers
 - status registers
 - AXI4-Stream interfaces
@@ -32,12 +33,12 @@ Communication packets sent from the computer to the hub interface consist of a 3
 
 The command consists of 32 bits containing the following information:
 
-information   | bits
-------------- | -------
-port address  |  0 - 17
-hub address   | 18 - 20
-burst length  | 21 - 30
-write/read#   | 31
+| information  | bits    |
+| ------------ | ------- |
+| port address | 0 - 17  |
+| hub address  | 18 - 20 |
+| burst length | 21 - 30 |
+| write/read#  | 31      |
 
 If the write/read# bit is 1, then the next number of 32-bit data words corresponding to the burst length will be interpreted as data and written to consecutive addresses starting from the address specified in the command.
 
@@ -45,16 +46,16 @@ If the write/read# bit is 0, then no data is expected. Instead, the number of 32
 
 The hub address is used to select one of the hub ports:
 
-hub port        | hub address
---------------- | -----------
-config register | 0
-status register | 1
-interface 0     | 2
-interface 1     | 3
-interface 2     | 4
-interface 3     | 5
-interface 4     | 6
-interface 5     | 7
+| hub port        | hub address |
+| --------------- | ----------- |
+| config register | 0           |
+| status register | 1           |
+| interface 0     | 2           |
+| interface 1     | 3           |
+| interface 2     | 4           |
+| interface 3     | 5           |
+| interface 4     | 6           |
+| interface 5     | 7           |
 
 The port address is used to communicate with the configuration registers, status registers and BRAM modules connected to the BRAM interfaces.
 
@@ -75,5 +76,6 @@ A basic project with the USB interface connected to the ADC interface via an int
 This template project can be used as a starting point for projects requiring ADC and USB interface. The Tcl code of this project can be found in [projects/template](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/template).
 
 The code for other projects using this USB interface can be found at the following links:
+
 - [Test hub](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/test_hub)
 - [SDR receiver](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver)

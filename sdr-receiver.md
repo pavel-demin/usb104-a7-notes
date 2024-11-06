@@ -11,6 +11,7 @@ This application requires the Zmod Digitizer module to be connected to the ZMOD 
 ## Hardware
 
 The implementation of the SDR receiver is quite straightforward:
+
 - An antenna is connected to one of the inputs of the Zmod Digitizer module
 - The on-board ADC (122.88 MS/s sampling frequency, 14-bit resolution) digitizes the RF signal from the antenna
 - The data coming from the ADC is processed by a in-phase/quadrature (I/Q) digital down-converter (DDC) running on the FPGA
@@ -51,51 +52,63 @@ The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index
 - Connect an antenna to the CH1 connector of the Zmod Digitizer module
 - Connect the USB104 A7 board to a USB port
 - Install [GNU Radio](https://www.gnuradio.org) and [python3-libusb1](https://github.com/vpelletier/python-libusb1):
+
 ```bash
 sudo apt-get install gnuradio python3-usb1
 ```
+
 - Install [pyhubio](https://github.com/pavel-demin/pyhubio):
+
 ```bash
 pip install pyhubio
 ```
+
 - Clone the source code repository:
+
 ```bash
 git clone https://github.com/pavel-demin/usb104-a7-notes
 cd usb104-a7-notes
 ```
+
 - Build the `sdr_receiver.bit` bitstream file for FPGA configuration:
+
 ```bash
 make NAME=sdr_receiver bit
 ```
+
 - Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_usb.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_usb.grc)):
+
 ```bash
 cp tmp/sdr_receiver.bit projects/sdr_receiver/gnuradio
 cd projects/sdr_receiver/gnuradio
 gnuradio-companion fm_usb.grc
 ```
 
-
 ## Building from source
 
 The structure of the source code and of the development chain is described at [this link](/led-blinker.md).
 
 Setting up the Vitis and Vivado environment:
+
 ```bash
 source /opt/Xilinx/Vitis/2020.2/settings64.sh
 ```
 
 Cloning the source code repository:
+
 ```bash
 git clone https://github.com/pavel-demin/usb104-a7-notes
 cd usb104-a7-notes
 ```
 
 Building `sdr_receiver.bit`:
+
 ```bash
 make NAME=sdr_receiver bit
 ```
 
 Configuring the FPGA:
+
 ```bash
 make NAME=sdr_receiver run
 ```

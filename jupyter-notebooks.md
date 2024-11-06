@@ -17,16 +17,19 @@ The [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/noteb
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 
 - Install Visual Studio Code following the platform-specific instructions below:
+
   - [macOS](https://code.visualstudio.com/docs/setup/mac)
   - [Linux](https://code.visualstudio.com/docs/setup/linux)
   - [Windows](https://code.visualstudio.com/docs/setup/windows)
 
 - Install the following Visual Studio Code extensions:
+
   - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
   - [Jupyter](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
   - [Micromamba](https://marketplace.visualstudio.com/items?itemName=corker.vscode-micromamba)
 
 - Open [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory in Visual Studio Code:
+
   - From the "File" menu select "Open Folder"
   - In the "Open Folder" dialog find and select [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory and click "Open"
 

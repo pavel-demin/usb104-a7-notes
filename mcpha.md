@@ -5,8 +5,9 @@ title: Multichannel Pulse Height Analyzer
 ## Interesting links
 
 Some interesting links on radiation spectroscopy:
-- [Digital signal processing for BGO detectors](https://doi.org/10.1016/0168-9002(93)91105-V)
-- [Digital gamma-ray spectroscopy based on FPGA technology](https://doi.org/10.1016/S0168-9002(01)01925-8)
+
+- [Digital signal processing for BGO detectors](<https://doi.org/10.1016/0168-9002(93)91105-V>)
+- [Digital gamma-ray spectroscopy based on FPGA technology](<https://doi.org/10.1016/S0168-9002(01)01925-8>)
 - [Digital signal processing for segmented HPGe detectors](https://archiv.ub.uni-heidelberg.de/volltextserver/4991)
 - [FPGA-based algorithms for the stability improvement of high-flux X-ray spectrometric imaging detectors](https://tel.archives-ouvertes.fr/tel-02096235)
 - [Spectrum Analysis Introduction](https://www.canberra.com/literature/fundamental-principles/pdf/Spectrum-Analysis.pdf)
@@ -54,22 +55,26 @@ The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/mast
 The structure of the source code and of the development chain is described at [this link](/led-blinker.md).
 
 Setting up the Vitis and Vivado environment:
+
 ```bash
 source /opt/Xilinx/Vitis/2020.2/settings64.sh
 ```
 
 Cloning the source code repository:
+
 ```bash
 git clone https://github.com/pavel-demin/usb104-a7-notes
 cd usb104-a7-notes
 ```
 
 Building `mcpha.bit`:
+
 ```bash
 make NAME=mcpha bit
 ```
 
 Configuring the FPGA:
+
 ```bash
 make NAME=mcpha run
 ```
