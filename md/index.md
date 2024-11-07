@@ -1,5 +1,6 @@
 ---
 layout: default.html
+permalink: /
 ---
 
 ![USB104 A7](/img/usb104-a7.png)
