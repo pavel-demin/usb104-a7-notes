@@ -52,7 +52,7 @@ The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/mast
 
 ## Building from source
 
-The structure of the source code and of the development chain is described at [this link](/led-blinker.md).
+The structure of the source code and of the development chain is described at [this link](/led-blinker/).
 
 Setting up the Vitis and Vivado environment:
 

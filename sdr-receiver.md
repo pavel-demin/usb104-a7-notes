@@ -86,7 +86,7 @@ gnuradio-companion fm_usb.grc
 
 ## Building from source
 
-The structure of the source code and of the development chain is described at [this link](/led-blinker.md).
+The structure of the source code and of the development chain is described at [this link](/led-blinker/).
 
 Setting up the Vitis and Vivado environment:
 
