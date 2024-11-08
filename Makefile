@@ -7,11 +7,8 @@
 NAME = led_blinker
 PART = xc7a100tcsg324-1
 
-CORES = axis_bram_writer axis_constant axis_counter axis_downsizer axis_fifo \
-  axis_histogram axis_hub axis_negator axis_oscilloscope \
-  axis_pulse_height_analyzer axis_selector axis_spi axis_timer axis_trigger \
-  axis_usb axis_validator axis_variable axis_zmod_adc cdce_gpio cdce_iic dsp48 \
-  port_selector port_slicer
+FILES = $(wildcard cores/*.v)
+CORES = $(FILES:.v=)
 
 VIVADO = vivado -nolog -nojournal -mode batch
 XSCT = xsct
@@ -21,7 +18,7 @@ RM = rm -rf
 
 all: tmp/$(NAME).bit
 
-cores: $(addprefix tmp/cores/, $(CORES))
+cores: $(addprefix tmp/, $(CORES))
 
 xpr: tmp/$(NAME).xpr
 
@@ -34,7 +31,7 @@ tmp/cores/%: cores/%.v
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/core.tcl -tclargs $* $(PART)
 
-tmp/%.xpr: projects/% $(addprefix tmp/cores/, $(CORES))
+tmp/%.xpr: projects/% $(addprefix tmp/, $(CORES))
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART)
 
