@@ -14,6 +14,7 @@ CORES = axis_bram_writer axis_constant axis_counter axis_downsizer axis_fifo \
   port_selector port_slicer
 
 VIVADO = vivado -nolog -nojournal -mode batch
+XSCT = xsct
 RM = rm -rf
 
 .PRECIOUS: tmp/cores/% tmp/%.xpr tmp/%.bit
@@ -27,7 +28,7 @@ xpr: tmp/$(NAME).xpr
 bit: tmp/$(NAME).bit
 
 run: tmp/$(NAME).bit
-	xc3sprog -v -c jtaghs1_fast $<
+	$(XSCT) scripts/jtag.tcl $<
 
 tmp/cores/%: cores/%.v
 	mkdir -p $(@D)
