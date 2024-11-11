@@ -1,6 +1,4 @@
----
-title: Multichannel Pulse Height Analyzer
----
+# Multichannel Pulse Height Analyzer
 
 ## Interesting links
 
@@ -42,7 +40,7 @@ The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/mast
 
 - Connect a signal source to the CH1 or CH2 connector of the Zmod Digitizer module
 - Connect the USB104 A7 board to a USB port
-- Download and unpack the [release zip file]({{ site.release_file }})
+- Download and unpack the [release zip file](release_file)
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 - Run the `mcpha.exe` program
 - Press the Start button in the upper left corner

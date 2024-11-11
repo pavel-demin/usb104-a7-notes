@@ -1,7 +1,3 @@
----
-permalink: /
----
-
 ![USB104 A7](/img/usb104-a7.png)
 
 1. [List of components](/components/)

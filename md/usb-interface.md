@@ -1,6 +1,4 @@
----
-title: USB interface
----
+# USB interface
 
 ## Requirements
 

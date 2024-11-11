@@ -1,6 +1,4 @@
----
-title: Links
----
+# Links
 
 - [Digilent documentation for USB104 A7](https://digilent.com/reference/programmable-logic/usb104a7/start)
 - [Digilent documentation for Zmod Digitizer](https://digilent.com/reference/zmod/digitizer/start)

@@ -1,6 +1,4 @@
----
-title: SDR receiver
----
+# SDR receiver
 
 ## Introduction
 
@@ -40,7 +38,7 @@ The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index
 
 - Connect an antenna to the CH1 connector of the Zmod Digitizer module
 - Connect the USB104 A7 board to a USB port
-- Download and unpack the [release zip file]({{ site.release_file }})
+- Download and unpack the [release zip file](release_file)
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 - Run the `sdr-receiver.exe` program
 - Press the Start button

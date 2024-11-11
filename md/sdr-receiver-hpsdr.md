@@ -1,6 +1,4 @@
----
-title: SDR receiver compatible with HPSDR
----
+# SDR receiver compatible with HPSDR
 
 ## Introduction
 
@@ -40,7 +38,7 @@ This SDR receiver should work with the programs that support the HPSDR/Metis com
 
 ## Getting started
 
-- Download and unpack the [release zip file]({{ site.release_file }}).
+- Download and unpack the [release zip file](release_file).
 - Copy the contents of the zip file to a directory.
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
 - Run the `sdr-receiver-hpsdr.exe` program.
