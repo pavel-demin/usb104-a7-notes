@@ -2,8 +2,6 @@ site_title: USB104 A7 Notes
 
 description: Notes on the USB104 A7 development board
 
-baseurl: https://pavel-demin.github.io/usb104-a7-notes
-
 source: https://github.com/pavel-demin/usb104-a7-notes
 issues: https://github.com/pavel-demin/usb104-a7-notes/issues
 
