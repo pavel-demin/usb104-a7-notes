@@ -22,15 +22,15 @@ The basic blocks of the digital down-converter (DDC) are shown in the following 
 
 ![SDR receiver](/img/sdr-receiver.png)
 
-The [projects/sdr_receiver](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver) directory contains two Tcl files: [block_design.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/block_design.tcl), [rx.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/rx.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
+The [projects/sdr_receiver]($source$/projects/sdr_receiver) directory contains two Tcl files: [block_design.tcl]($source$/projects/sdr_receiver/block_design.tcl), [rx.tcl]($source$/projects/sdr_receiver/rx.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
 
 ## Software
 
-The [projects/sdr_receiver/server](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/server) directory contains the source code of the ZMQ server ([sdr-receiver.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/server/sdr-receiver.py)) that receives control commands and transmits the I/Q data streams to the SDR programs.
+The [projects/sdr_receiver/server]($source$/projects/sdr_receiver/server) directory contains the source code of the ZMQ server ([sdr-receiver.py]($source$/projects/sdr_receiver/server/sdr-receiver.py)) that receives control commands and transmits the I/Q data streams to the SDR programs.
 
-The [projects/sdr_receiver/gnuradio](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio) directory directory contains flowgraph configuration examples for [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion).
+The [projects/sdr_receiver/gnuradio]($source$/projects/sdr_receiver/gnuradio) directory directory contains flowgraph configuration examples for [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion).
 
-The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) running the FM receiver flow graph ([fm_zmq.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_zmq.grc)) and communicating with the ZMQ server ([sdr-receiver.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver/server/sdr-receiver.py)).
+The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) running the FM receiver flow graph ([fm_zmq.grc]($source$/projects/sdr_receiver/gnuradio/fm_zmq.grc)) and communicating with the ZMQ server ([sdr-receiver.py]($source$/projects/sdr_receiver/server/sdr-receiver.py)).
 
 ![GNU Radio Companion](/img/sdr-receiver-fm-zmq.png)
 
@@ -38,12 +38,12 @@ The screenshot below shows [GNU Radio Companion](https://wiki.gnuradio.org/index
 
 - Connect an antenna to the CH1 connector of the Zmod Digitizer module
 - Connect the USB104 A7 board to a USB port
-- Download and unpack the [release zip file](release_file)
+- Download and unpack the [release zip file]($release_file$)
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 - Run the `sdr-receiver.exe` program
 - Press the Start button
 - Download and install [radioconda](https://github.com/ryanvolz/radioconda)
-- Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_zmq.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_zmq.grc))
+- Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_zmq.grc]($source$/projects/sdr_receiver/gnuradio/fm_zmq.grc))
 
 ## Getting started with GNU Radio on Linux
 
@@ -74,7 +74,7 @@ cd usb104-a7-notes
 make NAME=sdr_receiver bit
 ```
 
-- Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_usb.grc](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver/gnuradio/fm_usb.grc)):
+- Run [GNU Radio Companion](https://wiki.gnuradio.org/index.php/GNURadioCompanion) and open the FM receiver flow graph ([fm_usb.grc]($source$/projects/sdr_receiver/gnuradio/fm_usb.grc)):
 
 ```bash
 cp tmp/sdr_receiver.bit projects/sdr_receiver/gnuradio

@@ -26,13 +26,13 @@ The baseline is automatically subtracted. The baseline level is defined as the m
 
 The embedded oscilloscope can be used to check the shape of the pulse at the input of the pulse height analyzer module.
 
-The [projects/mcpha](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/mcpha) directory contains four Tcl files: [block_design.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/block_design.tcl), [pha.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/pha.tcl), [hst.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/hst.tcl), [osc.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/osc.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
+The [projects/mcpha]($source$/projects/mcpha) directory contains four Tcl files: [block_design.tcl]($source$/projects/mcpha/block_design.tcl), [pha.tcl]($source$/projects/mcpha/pha.tcl), [hst.tcl]($source$/projects/mcpha/hst.tcl), [osc.tcl]($source$/projects/mcpha/osc.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
 
-The source code of the [R](https://www.r-project.org) script used to calculate the coefficients of the FIR filter can be found in [projects/mcpha/filters/fir_0.r](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/filters/fir_0.r).
+The source code of the [R](https://www.r-project.org) script used to calculate the coefficients of the FIR filter can be found in [projects/mcpha/filters/fir_0.r]($source$/projects/mcpha/filters/fir_0.r).
 
 ## Software
 
-The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/mcpha/ui) directory contains the source code of the control program ([mcpha.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/mcpha/ui/mcpha.py)).
+The [projects/mcpha/ui]($source$/projects/mcpha/ui) directory contains the source code of the control program ([mcpha.py]($source$/projects/mcpha/ui/mcpha.py)).
 
 ![MCPHA control program](/img/mcpha-ui.png)
 
@@ -40,7 +40,7 @@ The [projects/mcpha/ui](https://github.com/pavel-demin/usb104-a7-notes/tree/mast
 
 - Connect a signal source to the CH1 or CH2 connector of the Zmod Digitizer module
 - Connect the USB104 A7 board to a USB port
-- Download and unpack the [release zip file](release_file)
+- Download and unpack the [release zip file]($release_file$)
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 - Run the `mcpha.exe` program
 - Press the Start button in the upper left corner

@@ -21,13 +21,13 @@ The I/Q data rate is configurable and four settings are available: 48, 96, 192, 
 
 The tunable frequency range covers from 0 Hz to 61.44 MHz.
 
-The [projects/sdr_receiver_hpsdr](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver_hpsdr) directory contains two Tcl files: [block_design.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver_hpsdr/block_design.tcl), [rx.tcl](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver_hpsdr/rx.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
+The [projects/sdr_receiver_hpsdr]($source$/projects/sdr_receiver_hpsdr) directory contains two Tcl files: [block_design.tcl]($source$/projects/sdr_receiver_hpsdr/block_design.tcl), [rx.tcl]($source$/projects/sdr_receiver_hpsdr/rx.tcl). The code in these files instantiates, configures and interconnects all the needed IP cores.
 
-The [projects/sdr_receiver_hpsdr/filters](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver_hpsdr/filters) directory contains the source code of the [R](https://www.r-project.org) script used to calculate the coefficients of the FIR filters.
+The [projects/sdr_receiver_hpsdr/filters]($source$/projects/sdr_receiver_hpsdr/filters) directory contains the source code of the [R](https://www.r-project.org) script used to calculate the coefficients of the FIR filters.
 
 ## Software
 
-The [projects/sdr_receiver_hpsdr/server](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects/sdr_receiver_hpsdr/server) directory contains the source code of the UDP server ([sdr-receiver-hpsdr.py](https://github.com/pavel-demin/usb104-a7-notes/blob/master/projects/sdr_receiver_hpsdr/server/sdr-receiver-hpsdr.py)) that receives control commands and transmits the I/Q data streams to the SDR programs.
+The [projects/sdr_receiver_hpsdr/server]($source$/projects/sdr_receiver_hpsdr/server) directory contains the source code of the UDP server ([sdr-receiver-hpsdr.py]($source$/projects/sdr_receiver_hpsdr/server/sdr-receiver-hpsdr.py)) that receives control commands and transmits the I/Q data streams to the SDR programs.
 
 This SDR receiver should work with the programs that support the HPSDR/Metis communication protocol. It was tested with the following programs:
 
@@ -38,7 +38,7 @@ This SDR receiver should work with the programs that support the HPSDR/Metis com
 
 ## Getting started
 
-- Download and unpack the [release zip file](release_file).
+- Download and unpack the [release zip file]($release_file$).
 - Copy the contents of the zip file to a directory.
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie).
 - Run the `sdr-receiver-hpsdr.exe` program.

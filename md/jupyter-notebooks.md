@@ -4,13 +4,13 @@
 
 The combination of Jupyter notebooks, the [pyhubio](https://github.com/pavel-demin/pyhubio) library and the [USB interface](/usb-interface/) allows interactive communication with all parts of the FPGA configuration and visualization of input and output data, making testing and prototyping more dynamic.
 
-The [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory contains a few examples of Jupyter notebooks.
+The [notebooks]($source$/notebooks) directory contains a few examples of Jupyter notebooks.
 
 ![Jupyter notebooks](/img/jupyter-notebooks.png)
 
 ## Getting started
 
-- Download and unpack the [release zip file](release_file)
+- Download and unpack the [release zip file]($release_file$)
 
 - Install the WinUSB driver for the USB interface of the USB104 A7 board (USB ID `0403:6010` and `0403:6014`) using [Zadig](https://zadig.akeo.ie)
 
@@ -26,10 +26,10 @@ The [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/noteb
   - [Jupyter](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
   - [Micromamba](https://marketplace.visualstudio.com/items?itemName=corker.vscode-micromamba)
 
-- Open [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory in Visual Studio Code:
+- Open [notebooks]($source$/notebooks) directory in Visual Studio Code:
 
   - From the "File" menu select "Open Folder"
-  - In the "Open Folder" dialog find and select [notebooks](https://github.com/pavel-demin/usb104-a7-notes/tree/master/notebooks) directory and click "Open"
+  - In the "Open Folder" dialog find and select [notebooks]($source$/notebooks) directory and click "Open"
 
 - Create micromamba environment:
   - From the "View" menu select "Command Palette"

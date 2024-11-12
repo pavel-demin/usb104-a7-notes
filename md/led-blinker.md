@@ -39,11 +39,11 @@ The source code is available at
 
 This repository contains the following components:
 
-- [Makefile](https://github.com/pavel-demin/usb104-a7-notes/blob/master/Makefile) that builds everything (almost)
-- [cfg](https://github.com/pavel-demin/usb104-a7-notes/tree/master/cfg) directory with constraints and board definition files
-- [cores](https://github.com/pavel-demin/usb104-a7-notes/tree/master/cores) directory with IP cores written in Verilog
-- [projects](https://github.com/pavel-demin/usb104-a7-notes/tree/master/projects) directory with Vivado projects written in Tcl
-- [scripts](https://github.com/pavel-demin/usb104-a7-notes/tree/master/scripts) directory with Tcl scripts for Vivado
+- [Makefile]($source$/Makefile) that builds everything (almost)
+- [cfg]($source$/cfg) directory with constraints and board definition files
+- [cores]($source$/cores) directory with IP cores written in Verilog
+- [projects]($source$/projects) directory with Vivado projects written in Tcl
+- [scripts]($source$/scripts) directory with Tcl scripts for Vivado
 
 ## Getting started
 
