@@ -32,6 +32,7 @@ The [notebooks]($source$/notebooks) directory contains a few examples of Jupyter
   - In the "Open Folder" dialog find and select [notebooks]($source$/notebooks) directory and click "Open"
 
 - Create micromamba environment:
+
   - From the "View" menu select "Command Palette"
   - Type "micromamba create environment"
 
