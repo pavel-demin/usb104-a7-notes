@@ -45,6 +45,10 @@ This repository contains the following components:
 - [projects]($source$/projects) directory with Vivado projects written in Tcl
 - [scripts]($source$/scripts) directory with Tcl scripts for Vivado
 
+All steps of the development chain and the corresponding scripts are shown in the following diagram:
+
+![Scripts](/img/scripts.png)
+
 ## Getting started
 
 Setting up the Vitis and Vivado environment:

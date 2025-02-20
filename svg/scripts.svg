@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd">
+ <path d="m300 45h370" fill="none" stroke="#000000" stroke-width="1px"/>
+ <text x="260" y="125" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"/>
+ <rect x="90" y="50" width="200" height="30" fill="none" stroke="#000000"/>
+ <text x="190" y="70" fill="#000000" font-family="Roboto Condensed" font-size="14px" text-align="center" text-anchor="middle" style="line-height:1.25"><tspan sodipodi:role="line">package IP cores</tspan></text>
+ <rect x="90" y="90" width="200" height="30" fill="none" stroke="#000000"/>
+ <rect x="90" y="130" width="200" height="30" fill="none" stroke="#000000"/>
+ <rect x="90" y="170" width="200" height="30" fill="none" stroke="#000000"/>
+ <rect x="90" y="210" width="200" height="30" fill="none" stroke="#000000"/>
+ <rect x="90" y="250" width="200" height="30" fill="none" stroke="#000000"/>
+ <text x="190" y="110" fill="#000000" font-family="Roboto Condensed" font-size="14px" text-align="center" text-anchor="middle" style="line-height:1.25"><tspan sodipodi:role="line">instantiate IP cores</tspan></text>
+ <text x="190" y="150" fill="#000000" font-family="Roboto Condensed" font-size="14px" text-align="center" text-anchor="middle" style="line-height:1.25"><tspan sodipodi:role="line">connect IP cores</tspan></text>
+ <text x="190" y="190" fill="#000000" font-family="Roboto Condensed" font-size="14px" text-align="center" text-anchor="middle" style="line-height:1.25"><tspan sodipodi:role="line">generate bitstream</tspan></text>
+ <text x="190" y="230" fill="#000000" font-family="Roboto Condensed" font-size="14px" text-align="center" text-anchor="middle" style="line-height:1.25"><tspan sodipodi:role="line">build projects</tspan></text>
+ <text x="190" y="270" fill="#000000" font-family="Roboto Condensed" font-size="14px" text-align="center" text-anchor="middle" style="line-height:1.25"><tspan sodipodi:role="line">build release zip file</tspan></text>
+ <text x="310" y="30" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">scripts</tspan></text>
+ <text x="310" y="70" fill="#000000" font-family="Roboto Condensed" font-size="14px" font-weight="bold" style="line-height:1.25"><tspan font-weight="bold" sodipodi:role="line">core.tcl</tspan></text>
+ <text x="310" y="130" fill="#000000" font-family="Roboto Condensed" font-size="14px" font-weight="bold" style="line-height:1.25"><tspan font-weight="bold" sodipodi:role="line">project.tcl</tspan></text>
+ <text x="310" y="190" fill="#000000" font-family="Roboto Condensed" font-size="14px" font-weight="bold" style="line-height:1.25"><tspan font-weight="bold" sodipodi:role="line">bitstream.tcl</tspan></text>
+ <text x="310" y="230" fill="#000000" font-family="Roboto Condensed" font-size="14px" font-weight="bold" style="line-height:1.25"><tspan font-weight="bold" sodipodi:role="line">Makefile</tspan></text>
+ <text x="310" y="270" fill="#000000" font-family="Roboto Condensed" font-size="14px" font-weight="bold" style="line-height:1.25"><tspan font-weight="bold" sodipodi:role="line">release.sh</tspan></text>
+ <text x="410" y="30" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">arguments</tspan></text>
+ <text x="410" y="70" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">axis_hub</tspan></text>
+ <text x="410" y="130" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">led_blinker</tspan></text>
+ <text x="410" y="190" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">led_blinker</tspan></text>
+ <text x="410" y="230" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">NAME=led_blinker</tspan></text>
+ <text x="540" y="70" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">xc7a100tcsg324-1</tspan></text>
+ <text x="540" y="130" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">xc7a100tcsg324-1</tspan></text>
+ <text x="540" y="230" fill="#000000" font-family="Roboto Condensed" font-size="14px" style="line-height:1.25"><tspan sodipodi:role="line">bit</tspan></text>
+ <path d="m290 85a5 5 0 0 1 5 5" fill="none" stroke="#000000"/>
+ <path d="m300 125a5 5 0 0 0-5 5" fill="none" stroke="#000000"/>
+ <path d="m300 125a5 5 0 0 1-5-5" fill="none" stroke="#000000"/>
+ <path d="m295 130v30" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m295 90v30" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m290 165a5 5 0 0 0 5-5" fill="none" stroke="#000000"/>
+ <path d="m300 85h370" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m300 165h370" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m300 205h370" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m300 245h370" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m300 285h370" fill="none" stroke="#000000" stroke-width="1px"/>
+ <path d="m400 10v275" fill="none" stroke="#000000" stroke-width="1px"/>
+</svg>
