@@ -4,7 +4,7 @@
 
 For my experiments with the USB104 A7 board, I'd like to have the following development environment:
 
-- recent version of the [Vitis Core Development Kit](https://www.xilinx.com/products/design-tools/vitis.html)
+- recent version of the [Vitis Core Development Kit](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vitis.html)
 - recent version of the [Debian distribution](https://www.debian.org/releases/bookworm) on the development machine
 - basic project with all the USB104 A7 peripherals connected
 - mostly command-line tools
@@ -17,7 +17,7 @@ Here is how I set it all up.
 My development machine has the following installed:
 
 - [Debian](https://www.debian.org/releases/bookworm) 12 (amd64)
-- [Vitis Core Development Kit](https://www.xilinx.com/products/design-tools/vitis.html) 2025.1
+- [Vitis Core Development Kit](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vitis.html) 2025.1
 
 Here are the commands to install all the other required packages:
 
