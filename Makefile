@@ -7,18 +7,13 @@
 NAME = led_blinker
 PART = xc7a100tcsg324-1
 
-FILES = $(wildcard cores/*.v)
-CORES = $(FILES:.v=)
-
 VIVADO = vivado -nolog -nojournal -mode batch
 XSCT = xsct
 RM = rm -rf
 
-.PRECIOUS: tmp/cores/% tmp/%.xpr tmp/%.bit
+.PRECIOUS: tmp/%.xpr tmp/%.bit
 
 all: tmp/$(NAME).bit
-
-cores: $(addprefix tmp/, $(CORES))
 
 xpr: tmp/$(NAME).xpr
 
@@ -26,10 +21,6 @@ bit: tmp/$(NAME).bit
 
 run: tmp/$(NAME).bit
 	$(XSCT) scripts/jtag.tcl $<
-
-tmp/cores/%: cores/%.v
-	mkdir -p $(@D)
-	$(VIVADO) -source scripts/core.tcl -tclargs $* $(PART)
 
 tmp/%.xpr: projects/% $(addprefix tmp/, $(CORES))
 	mkdir -p $(@D)

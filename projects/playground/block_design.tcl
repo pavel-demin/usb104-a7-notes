@@ -11,7 +11,7 @@ cell xilinx.com:ip:proc_sys_reset rst_0 {} {
 # USB
 
 # Create axis_usb
-cell pavel-demin:user:axis_usb usb_0 {} {
+cell axis_usb usb_0 {} {
   usb_clk usb_clk_i
   usb_empty usb_rxfn_i
   usb_full usb_txen_i
@@ -26,7 +26,7 @@ cell pavel-demin:user:axis_usb usb_0 {} {
 # HUB
 
 # Create axis_hub
-cell pavel-demin:user:axis_hub hub_0 {
+cell axis_hub hub_0 {
   CFG_DATA_WIDTH 96
   STS_DATA_WIDTH 64
 } {
@@ -39,7 +39,7 @@ cell pavel-demin:user:axis_hub hub_0 {
 # LED
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_0 {
+cell port_slicer slice_0 {
   DIN_WIDTH 96 DIN_FROM 3 DIN_TO 0
 } {
   din hub_0/cfg_data
@@ -49,14 +49,14 @@ cell pavel-demin:user:port_slicer slice_0 {
 # DSP48
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_1 {
+cell port_slicer slice_1 {
   DIN_WIDTH 96 DIN_FROM 47 DIN_TO 32
 } {
   din hub_0/cfg_data
 }
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_2 {
+cell port_slicer slice_2 {
   DIN_WIDTH 96 DIN_FROM 63 DIN_TO 48
 } {
   din hub_0/cfg_data
@@ -91,7 +91,7 @@ cell xilinx.com:ip:xlconcat concat_0 {
 # COUNTER
 
 # Create axis_counter
-cell pavel-demin:user:axis_counter cntr_0 {
+cell axis_counter cntr_0 {
   AXIS_TDATA_WIDTH 32
 } {
   M_AXIS hub_0/S00_AXIS
@@ -101,14 +101,14 @@ cell pavel-demin:user:axis_counter cntr_0 {
 # DDS
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_3 {
+cell port_slicer slice_3 {
   DIN_WIDTH 96 DIN_FROM 95 DIN_TO 64
 } {
   din hub_0/cfg_data
 }
 
 # Create axis_constant
-cell pavel-demin:user:axis_constant phase_0 {
+cell axis_constant phase_0 {
   AXIS_TDATA_WIDTH 32
 } {
   cfg_data slice_3/dout

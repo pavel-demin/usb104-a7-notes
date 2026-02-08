@@ -1,5 +1,5 @@
 # Create axis_hub
-cell pavel-demin:user:axis_hub hub_0 {
+cell axis_hub hub_0 {
   CFG_DATA_WIDTH 160
   STS_DATA_WIDTH 32
 } {
@@ -8,35 +8,35 @@ cell pavel-demin:user:axis_hub hub_0 {
 }
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_0 {
+cell port_slicer slice_0 {
   DIN_WIDTH 160 DIN_FROM 0 DIN_TO 0
 } {
   din hub_0/cfg_data
 }
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_1 {
+cell port_slicer slice_1 {
   DIN_WIDTH 160 DIN_FROM 32 DIN_TO 32
 } {
   din hub_0/cfg_data
 }
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_2 {
+cell port_slicer slice_2 {
   DIN_WIDTH 160 DIN_FROM 79 DIN_TO 64
 } {
   din hub_0/cfg_data
 }
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_3 {
+cell port_slicer slice_3 {
   DIN_WIDTH 160 DIN_FROM 135 DIN_TO 96
 } {
   din hub_0/cfg_data
 }
 
 # Create port_selector
-cell pavel-demin:user:port_selector selector_0 {
+cell port_selector selector_0 {
   DOUT_WIDTH 16
 } {
   cfg slice_1/dout
@@ -44,7 +44,7 @@ cell pavel-demin:user:port_selector selector_0 {
 }
 
 # Create axis_constant
-cell pavel-demin:user:axis_constant phase_0 {
+cell axis_constant phase_0 {
   AXIS_TDATA_WIDTH 40
 } {
   cfg_data slice_3/dout
@@ -74,14 +74,14 @@ cell xilinx.com:ip:xlconstant const_0
 for {set i 0} {$i <= 1} {incr i} {
 
   # Create port_slicer
-  cell pavel-demin:user:port_slicer dds_slice_$i {
+  cell port_slicer dds_slice_$i {
     DIN_WIDTH 48 DIN_FROM [expr 24 * ($i % 2) + 23] DIN_TO [expr 24 * ($i % 2)]
   } {
     din dds_0/m_axis_data_tdata
   }
 
   # Create dsp48
-  cell pavel-demin:user:dsp48 mult_$i {
+  cell dsp48 mult_$i {
     A_WIDTH 24
     B_WIDTH 14
     P_WIDTH 24
@@ -92,7 +92,7 @@ for {set i 0} {$i <= 1} {incr i} {
   }
 
   # Create axis_variable
-  cell pavel-demin:user:axis_variable rate_$i {
+  cell axis_variable rate_$i {
     AXIS_TDATA_WIDTH 16
   } {
     cfg_data slice_2/dout
@@ -213,7 +213,7 @@ cell xilinx.com:ip:axis_dwidth_converter conv_1 {
 }
 
 # Create axis_fifo
-cell pavel-demin:user:axis_fifo fifo_0 {
+cell axis_fifo fifo_0 {
   S_AXIS_TDATA_WIDTH 64
   M_AXIS_TDATA_WIDTH 32
   WRITE_DEPTH 32768

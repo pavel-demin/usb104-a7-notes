@@ -18,7 +18,7 @@ cell xilinx.com:ip:clk_wiz pll_0 {
 # CDCE IIC
 
 # Create cdce_iic
-cell pavel-demin:user:cdce_iic iic_0 {
+cell cdce_iic iic_0 {
   DATA_SIZE 132
   DATA_FILE cdce_100.mem
 } {
@@ -29,7 +29,7 @@ cell pavel-demin:user:cdce_iic iic_0 {
 # CDCE GPIO
 
 # Create cdce_gpio
-cell pavel-demin:user:cdce_gpio gpio_0 {} {
+cell cdce_gpio gpio_0 {} {
   gpio cdce_gpio_tri_io
   aclk clk_i
 }
@@ -49,7 +49,7 @@ cell xilinx.com:ip:proc_sys_reset rst_0 {} {
 # USB
 
 # Create axis_usb
-cell pavel-demin:user:axis_usb usb_0 {} {
+cell axis_usb usb_0 {} {
   usb_clk usb_clk_i
   usb_empty usb_rxfn_i
   usb_full usb_txen_i
@@ -64,7 +64,7 @@ cell pavel-demin:user:axis_usb usb_0 {} {
 # HUB
 
 # Create axis_hub
-cell pavel-demin:user:axis_hub hub_0 {
+cell axis_hub hub_0 {
   CFG_DATA_WIDTH 32
   STS_DATA_WIDTH 32
 } {
@@ -75,7 +75,7 @@ cell pavel-demin:user:axis_hub hub_0 {
 }
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_0 {
+cell port_slicer slice_0 {
   DIN_WIDTH 32 DIN_FROM 0 DIN_TO 0
 } {
   din hub_0/cfg_data
@@ -84,7 +84,7 @@ cell pavel-demin:user:port_slicer slice_0 {
 # ADC
 
 # Create axis_zmod_adc
-cell pavel-demin:user:axis_zmod_adc adc_0 {
+cell axis_zmod_adc adc_0 {
   ADC_DATA_WIDTH 14
 } {
   aclk pll_0/clk_out1
@@ -94,7 +94,7 @@ cell pavel-demin:user:axis_zmod_adc adc_0 {
 # FIFO
 
 # Create axis_fifo
-cell pavel-demin:user:axis_fifo fifo_0 {
+cell axis_fifo fifo_0 {
   S_AXIS_TDATA_WIDTH 32
   M_AXIS_TDATA_WIDTH 32
   WRITE_DEPTH 131072
@@ -109,7 +109,7 @@ cell pavel-demin:user:axis_fifo fifo_0 {
 # ADC SPI
 
 # Create axis_fifo
-cell pavel-demin:user:axis_fifo fifo_1 {
+cell axis_fifo fifo_1 {
   S_AXIS_TDATA_WIDTH 32
   M_AXIS_TDATA_WIDTH 32
   WRITE_DEPTH 1024
@@ -120,7 +120,7 @@ cell pavel-demin:user:axis_fifo fifo_1 {
 }
 
 # Create axis_spi
-cell pavel-demin:user:axis_spi spi_0 {
+cell axis_spi spi_0 {
   SPI_DATA_WIDTH 24
 } {
   S_AXIS fifo_1/M_AXIS

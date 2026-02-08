@@ -2,8 +2,6 @@ source /opt/Xilinx/2025.1/Vitis/settings64.sh
 
 JOBS=`nproc 2> /dev/null || echo 1`
 
-make -j $JOBS cores
-
 PRJS="led_blinker mcpha playground sdr_receiver sdr_receiver_hpsdr template"
 
 printf "%s\n" $PRJS | xargs -n 1 -P $JOBS -I {} make NAME={} bit
@@ -50,8 +48,7 @@ cp notebooks/environment.yml $dir
 dir=$tag/playground
 
 cp -a cfg $dir
-cp -a tmp/cores $dir
-rm -rf $dir/cores/*.*
+cp -a cores $dir
 cp -a modules $dir
 cp -a tmp/playground.gen $dir
 cp -a tmp/playground.ip_user_files $dir
@@ -62,8 +59,7 @@ sed -i 's|Path=".*\.xpr"|Path="playground.xpr"|;s|\.\./||' $dir/playground.xpr
 dir=$tag/template
 
 cp -a cfg $dir
-cp -a tmp/cores $dir
-rm -rf $dir/cores/*.*
+cp -a cores $dir
 cp -a modules $dir
 cp -a tmp/template.gen $dir
 cp -a tmp/template.ip_user_files $dir

@@ -1,54 +1,54 @@
 # pha_0/aresetn
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_0 {
+cell port_slicer slice_0 {
   DIN_WIDTH 2 DIN_FROM 0 DIN_TO 0
 }
 
 # timer_0/aresetn
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_1 {
+cell port_slicer slice_1 {
   DIN_WIDTH 2 DIN_FROM 1 DIN_TO 1
 }
 
 # timer_0/run_flag
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_2 {
+cell port_slicer slice_2 {
   DIN_WIDTH 160 DIN_FROM 0 DIN_TO 0
 }
 
 # timer_0/cfg_data
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_3 {
+cell port_slicer slice_3 {
   DIN_WIDTH 160 DIN_FROM 95 DIN_TO 32
 }
 
 # pha_0/cfg_data
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_4 {
+cell port_slicer slice_4 {
   DIN_WIDTH 160 DIN_FROM 111 DIN_TO 96
 }
 
 # pha_0/min_data
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_5 {
+cell port_slicer slice_5 {
   DIN_WIDTH 160 DIN_FROM 143 DIN_TO 128
 }
 
 # pha_0/max_data
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_6 {
+cell port_slicer slice_6 {
   DIN_WIDTH 160 DIN_FROM 159 DIN_TO 144
 }
 
 # Create axis_timer
-cell pavel-demin:user:axis_timer timer_0 {
+cell axis_timer timer_0 {
   CNTR_WIDTH 64
 } {
   run_flag slice_2/dout
@@ -58,7 +58,7 @@ cell pavel-demin:user:axis_timer timer_0 {
 }
 
 # Create axis_pulse_height_analyzer
-cell pavel-demin:user:axis_pulse_height_analyzer pha_0 {
+cell axis_pulse_height_analyzer pha_0 {
   AXIS_TDATA_WIDTH 16
   AXIS_TDATA_SIGNED TRUE
   CNTR_WIDTH 16
@@ -71,7 +71,7 @@ cell pavel-demin:user:axis_pulse_height_analyzer pha_0 {
 }
 
 # Create axis_validator
-cell pavel-demin:user:axis_validator vldtr_0 {
+cell axis_validator vldtr_0 {
   AXIS_TDATA_WIDTH 16
 } {
   S_AXIS pha_0/M_AXIS

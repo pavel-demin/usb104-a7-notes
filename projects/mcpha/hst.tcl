@@ -1,7 +1,7 @@
 # hst_0/aresetn
 
 # Create port_slicer
-cell pavel-demin:user:port_slicer slice_0 {
+cell port_slicer slice_0 {
   DIN_WIDTH 2 DIN_FROM 0 DIN_TO 0
 }
 
@@ -18,7 +18,7 @@ cell xilinx.com:ip:blk_mem_gen bram_0 {
 }
 
 # Create axis_histogram
-cell pavel-demin:user:axis_histogram hst_0 {
+cell axis_histogram hst_0 {
   AXIS_TDATA_WIDTH 16
   BRAM_DATA_WIDTH 32
   BRAM_ADDR_WIDTH 14
