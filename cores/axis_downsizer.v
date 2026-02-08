@@ -55,7 +55,7 @@ module axis_downsizer #
     end
   end
 
-  inout_buffer #(
+  output_buffer #(
     .DATA_WIDTH(M_AXIS_TDATA_WIDTH)
   ) buf_0 (
     .aclk(aclk), .aresetn(aresetn),
