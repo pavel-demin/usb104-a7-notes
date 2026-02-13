@@ -25,6 +25,20 @@ module axis_bscan
   wire [31:0] int_rx_tdata_wire;
   wire int_rx_tvalid_wire, int_rx_tready_wire;
 
+  wire [31:0] int_s_tdata_wire;
+  wire int_s_tvalid_wire, int_s_tready_wire;
+
+  wire [31:0] int_m_tdata_wire;
+  wire int_m_tvalid_wire, int_m_tready_wire;
+
+  inout_buffer #(
+    .DATA_WIDTH(32)
+  ) buf_tx (
+    .aclk(aclk), .aresetn(1'b1),
+    .in_data(s_axis_tdata), .in_valid(s_axis_tvalid), .in_ready(s_axis_tready),
+    .out_data(int_s_tdata_wire), .out_valid(int_s_tvalid_wire), .out_ready(int_s_tready_wire)
+  );
+
   axis_fifo_async #(
     .AXIS_TDATA_WIDTH(32),
     .ADDR_WIDTH(10)
@@ -32,9 +46,9 @@ module axis_bscan
     .s_axis_aclk(aclk),
     .s_axis_aresetn(1'b1),
 
-    .s_axis_tdata(s_axis_tdata),
-    .s_axis_tvalid(s_axis_tvalid),
-    .s_axis_tready(s_axis_tready),
+    .s_axis_tdata(int_s_tdata_wire),
+    .s_axis_tvalid(int_s_tvalid_wire),
+    .s_axis_tready(int_s_tready_wire),
 
     .m_axis_aclk(int_tck_wire),
     .m_axis_aresetn(1'b1),
@@ -103,9 +117,17 @@ module axis_bscan
     .m_axis_aclk(aclk),
     .m_axis_aresetn(1'b1),
 
-    .m_axis_tdata(m_axis_tdata),
-    .m_axis_tvalid(m_axis_tvalid),
-    .m_axis_tready(m_axis_tready)
+    .m_axis_tdata(int_m_tdata_wire),
+    .m_axis_tvalid(int_m_tvalid_wire),
+    .m_axis_tready(int_m_tready_wire)
+  );
+
+  inout_buffer #(
+    .DATA_WIDTH(32)
+  ) buf_rx (
+    .aclk(aclk), .aresetn(1'b1),
+    .in_data(int_m_tdata_wire), .in_valid(int_m_tvalid_wire), .in_ready(int_m_tready_wire),
+    .out_data(m_axis_tdata), .out_valid(m_axis_tvalid), .out_ready(m_axis_tready)
   );
 
 endmodule

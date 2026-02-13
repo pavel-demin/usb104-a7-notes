@@ -46,15 +46,6 @@ cell axis_bscan bscan_0 {} {
   aresetn rst_0/peripheral_aresetn
 }
 
-# Create axis_buffer
-cell axis_buffer buf_0 {
-  AXIS_TDATA_WIDTH 32
-} {
-  S_AXIS bscan_0/M_AXIS
-  aclk pll_0/clk_out1
-  aresetn rst_0/peripheral_aresetn
-}
-
 # HUB
 
 # Create axis_hub
@@ -62,7 +53,7 @@ cell axis_hub hub_0 {
   CFG_DATA_WIDTH 32
   STS_DATA_WIDTH 32
 } {
-  S_AXIS buf_0/M_AXIS
+  S_AXIS bscan_0/M_AXIS
   M_AXIS bscan_0/S_AXIS
   aclk pll_0/clk_out1
   aresetn rst_0/peripheral_aresetn
