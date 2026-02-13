@@ -25,32 +25,63 @@ module axis_fifo_sync #
 
   reg [AXIS_TDATA_WIDTH-1:0] bram [BRAM_SIZE-1:0];
 
-  reg [ADDR_WIDTH:0] int_count_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_wr_addr_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_rd_addr_reg = {(ADDR_WIDTH+1){1'b0}};
+  reg [ADDR_WIDTH:0] int_count_reg = 0;
 
-  wire [AXIS_TDATA_WIDTH-1:0] int_data_wire;
+  reg [ADDR_WIDTH:0] int_wr_addr0_reg = 0;
+  reg [ADDR_WIDTH-1:0] int_wr_addr1_reg = 1;
+  reg [ADDR_WIDTH-1:0] int_wr_addr2_reg = 2;
 
-  wire [ADDR_WIDTH:0] int_rd_sum_wire, int_wr_sum_wire;
-  wire int_valid_wire, int_ready_wire;
+  reg [ADDR_WIDTH:0] int_rd_addr0_reg = 0;
+  reg [ADDR_WIDTH-1:0] int_rd_addr1_reg = 1;
+
+  reg int_wr_ready_reg, int_rd_valid_reg;
+
+  wire [ADDR_WIDTH:0] int_wr_sum0_wire, int_rd_sum0_wire;
+  wire [ADDR_WIDTH-1:0] int_wr_sum1_wire, int_wr_sum2_wire, int_rd_sum1_wire;
+
+  wire [ADDR_WIDTH-1:0] int_wr_addr0_wire, int_rd_addr0_wire;
+
+  wire int_wr_enbl_wire, int_rd_enbl_wire;
+
+  wire int_wr_ready1_wire, int_wr_ready2_wire;
+  wire int_rd_valid0_wire, int_rd_valid1_wire;
+
+  wire int_rd_ready_wire;
 
   assign count = int_count_reg;
 
-  assign int_wr_sum_wire = int_wr_addr_reg + 1;
-  assign int_rd_sum_wire = int_rd_addr_reg + 1;
+  assign int_wr_sum0_wire = int_wr_addr0_reg + 1'b1;
+  assign int_wr_sum1_wire = int_wr_addr1_reg + 1'b1;
+  assign int_wr_sum2_wire = int_wr_addr2_reg + 1'b1;
 
-  assign s_axis_tready = int_wr_addr_reg != {~int_rd_addr_reg[ADDR_WIDTH], int_rd_addr_reg[ADDR_WIDTH-1:0]};
-  assign int_valid_wire = int_wr_addr_reg != int_rd_addr_reg;
+  assign int_rd_sum0_wire = int_rd_addr0_reg + 1'b1;
+  assign int_rd_sum1_wire = int_rd_addr1_reg + 1'b1;
+
+  assign int_wr_addr0_wire = int_wr_addr0_reg[ADDR_WIDTH-1:0];
+  assign int_rd_addr0_wire = int_rd_addr0_reg[ADDR_WIDTH-1:0];
+
+  assign int_wr_enbl_wire = s_axis_tvalid & int_wr_ready_reg;
+  assign int_rd_enbl_wire = int_rd_valid_reg & int_rd_ready_wire;
+
+  assign int_wr_ready1_wire = (int_wr_addr1_reg != int_rd_addr0_wire);
+  assign int_wr_ready2_wire = (int_wr_addr2_reg != int_rd_addr0_wire) | ~int_wr_enbl_wire;
+
+  assign int_rd_valid0_wire = (int_rd_addr0_wire != int_wr_addr0_wire);
+  assign int_rd_valid1_wire = (int_rd_addr1_reg != int_wr_addr0_wire) | ~int_rd_enbl_wire;
 
   always @(posedge aclk)
   begin
     if(~aresetn)
     begin
-      int_count_reg <= {(ADDR_WIDTH+1){1'b0}};
+      int_count_reg <= 0;
+      int_wr_ready_reg <= 1'b0;
+      int_rd_valid_reg <= 1'b0;
     end
     else
     begin
-      int_count_reg <= int_wr_addr_reg - int_rd_addr_reg + m_axis_tvalid;
+      int_count_reg <= int_wr_addr0_reg - int_rd_addr0_reg + m_axis_tvalid;
+      int_wr_ready_reg <= int_wr_ready1_wire & int_wr_ready2_wire;
+      int_rd_valid_reg <= int_rd_valid0_wire & int_rd_valid1_wire;
     end
   end
 
@@ -58,12 +89,16 @@ module axis_fifo_sync #
   begin
     if(~aresetn)
     begin
-      int_wr_addr_reg <= {(ADDR_WIDTH+1){1'b0}};
+      int_wr_addr0_reg <= 0;
+      int_wr_addr1_reg <= 1;
+      int_wr_addr2_reg <= 2;
     end
-    else if(s_axis_tvalid & s_axis_tready)
+    else if(int_wr_enbl_wire)
     begin
-      bram[int_wr_addr_reg[ADDR_WIDTH-1:0]] <= s_axis_tdata;
-      int_wr_addr_reg <= int_wr_sum_wire;
+      bram[int_wr_addr0_wire] <= s_axis_tdata;
+      int_wr_addr0_reg <= int_wr_sum0_wire;
+      int_wr_addr1_reg <= int_wr_sum1_wire;
+      int_wr_addr2_reg <= int_wr_sum2_wire;
     end
   end
 
@@ -71,22 +106,24 @@ module axis_fifo_sync #
   begin
     if(~aresetn)
     begin
-      int_rd_addr_reg <= {(ADDR_WIDTH+1){1'b0}};
+      int_rd_addr0_reg <= 0;
+      int_rd_addr1_reg <= 1;
     end
-    else if(int_ready_wire & int_valid_wire)
+    else if(int_rd_enbl_wire)
     begin
-      int_rd_addr_reg <= int_rd_sum_wire;
+      int_rd_addr0_reg <= int_rd_sum0_wire;
+      int_rd_addr1_reg <= int_rd_sum1_wire;
     end
   end
-
-  assign int_data_wire = bram[int_rd_addr_reg[ADDR_WIDTH-1:0]];
 
   output_buffer #(
     .DATA_WIDTH(AXIS_TDATA_WIDTH)
   ) buf_0 (
     .aclk(aclk), .aresetn(aresetn),
-    .in_data(int_data_wire), .in_valid(int_valid_wire), .in_ready(int_ready_wire),
+    .in_data(bram[int_rd_addr0_wire]), .in_valid(int_rd_valid_reg), .in_ready(int_rd_ready_wire),
     .out_data(m_axis_tdata), .out_valid(m_axis_tvalid), .out_ready(m_axis_tready)
   );
+
+  assign s_axis_tready = int_wr_ready_reg;
 
 endmodule

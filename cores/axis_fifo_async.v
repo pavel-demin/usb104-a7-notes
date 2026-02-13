@@ -26,55 +26,117 @@ module axis_fifo_async #
 
   reg [AXIS_TDATA_WIDTH-1:0] bram [BRAM_SIZE-1:0];
 
-  reg [ADDR_WIDTH:0] int_wr_addr_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_rd_addr_reg = {(ADDR_WIDTH+1){1'b0}};
+  reg [ADDR_WIDTH-1:0] int_wr_addr0_reg = 0;
+  reg [ADDR_WIDTH-1:0] int_wr_addr1_reg = 1;
+  reg [ADDR_WIDTH-1:0] int_wr_addr2_reg = 2;
 
-  reg [ADDR_WIDTH:0] int_wr_gray_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_rd_gray_reg = {(ADDR_WIDTH+1){1'b0}};
+  reg [ADDR_WIDTH-1:0] int_rd_addr0_reg = 0;
+  reg [ADDR_WIDTH-1:0] int_rd_addr1_reg = 1;
 
-  reg [ADDR_WIDTH:0] int_wr_cdc0_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_wr_cdc1_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_wr_cdc2_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_wr_cdc3_reg = {(ADDR_WIDTH+1){1'b0}};
+  reg [ADDR_WIDTH-1:0] int_wr_gray0_reg = 0;
+  reg [ADDR_WIDTH-1:0] int_wr_gray1_reg = 1;
+  reg [ADDR_WIDTH-1:0] int_wr_gray2_reg = 3;
 
-  reg [ADDR_WIDTH:0] int_rd_cdc0_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_rd_cdc1_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_rd_cdc2_reg = {(ADDR_WIDTH+1){1'b0}};
-  reg [ADDR_WIDTH:0] int_rd_cdc3_reg = {(ADDR_WIDTH+1){1'b0}};
+  reg [ADDR_WIDTH-1:0] int_rd_gray0_reg = 0;
+  reg [ADDR_WIDTH-1:0] int_rd_gray1_reg = 1;
 
-  wire [AXIS_TDATA_WIDTH-1:0] int_data_wire;
-  wire [ADDR_WIDTH:0] int_rd_sum_wire, int_wr_sum_wire;
-  wire int_valid_wire, int_ready_wire;
+  reg int_wr_ready_reg, int_rd_valid_reg;
 
-  assign int_wr_sum_wire = int_wr_addr_reg + 1;
-  assign int_rd_sum_wire = int_rd_addr_reg + 1;
+  wire [ADDR_WIDTH-1:0] int_wr_sum0_wire, int_rd_sum0_wire;
+  wire [ADDR_WIDTH-1:0] int_wr_sum1_wire, int_wr_sum2_wire, int_rd_sum1_wire;
 
-  assign s_axis_tready = int_wr_cdc3_reg != {~int_wr_gray_reg[ADDR_WIDTH:ADDR_WIDTH-1], int_wr_gray_reg[ADDR_WIDTH-2:0]};
-  assign int_valid_wire = int_rd_cdc3_reg != int_rd_gray_reg;
+  wire [ADDR_WIDTH-1:0] int_wr_addr0_wire, int_rd_addr0_wire;
+
+  wire [ADDR_WIDTH-1:0] int_wr_gray0_wire, int_rd_gray0_wire;
+
+  wire int_wr_enbl_wire, int_rd_enbl_wire;
+
+  wire int_wr_ready1_wire, int_wr_ready2_wire;
+  wire int_rd_valid0_wire, int_rd_valid1_wire;
+
+  wire int_rd_ready_wire;
+
+  assign int_wr_sum0_wire = int_wr_addr0_reg + 1'b1;
+  assign int_wr_sum1_wire = int_wr_addr1_reg + 1'b1;
+  assign int_wr_sum2_wire = int_wr_addr2_reg + 1'b1;
+
+  assign int_rd_sum0_wire = int_rd_addr0_reg + 1'b1;
+  assign int_rd_sum1_wire = int_rd_addr1_reg + 1'b1;
+
+  assign int_wr_addr0_wire = int_wr_addr0_reg[ADDR_WIDTH-1:0];
+  assign int_rd_addr0_wire = int_rd_addr0_reg[ADDR_WIDTH-1:0];
+
+  assign int_wr_enbl_wire = s_axis_tvalid & int_wr_ready_reg;
+  assign int_rd_enbl_wire = int_rd_valid_reg & int_rd_ready_wire;
+
+  assign int_wr_ready1_wire = (int_wr_gray1_reg != int_rd_gray0_wire);
+  assign int_wr_ready2_wire = (int_wr_gray2_reg != int_rd_gray0_wire) | ~int_wr_enbl_wire;
+
+  assign int_rd_valid0_wire = (int_rd_gray0_reg != int_wr_gray0_wire);
+  assign int_rd_valid1_wire = (int_rd_gray1_reg != int_wr_gray0_wire) | ~int_rd_enbl_wire;
+
+  cdc #(
+    .DATA_WIDTH(ADDR_WIDTH)
+  ) cdc_wr (
+    .aclk(s_axis_aclk),
+    .aresetn(s_axis_aresetn),
+    .in_data(int_rd_gray0_reg),
+    .out_data(int_rd_gray0_wire)
+  );
 
   always @(posedge s_axis_aclk)
   begin
     if(~s_axis_aresetn)
     begin
-      int_wr_addr_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_wr_gray_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_wr_cdc0_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_wr_cdc1_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_wr_cdc2_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_wr_cdc3_reg <= {(ADDR_WIDTH+1){1'b0}};
+      int_wr_ready_reg <= 1'b0;
     end
     else
     begin
-      if(s_axis_tvalid & s_axis_tready)
-      begin
-        bram[int_wr_addr_reg[ADDR_WIDTH-1:0]] <= s_axis_tdata;
-        int_wr_addr_reg <= int_wr_sum_wire;
-        int_wr_gray_reg <= {int_wr_sum_wire[ADDR_WIDTH], int_wr_sum_wire[ADDR_WIDTH-1:0] ^ int_wr_sum_wire[ADDR_WIDTH:1]};
-      end
-      int_wr_cdc0_reg <= int_rd_gray_reg;
-      int_wr_cdc1_reg <= int_wr_cdc0_reg;
-      int_wr_cdc2_reg <= int_wr_cdc1_reg;
-      int_wr_cdc3_reg <= int_wr_cdc2_reg;
+      int_wr_ready_reg <= int_wr_ready1_wire & int_wr_ready2_wire;
+    end
+  end
+
+  always @(posedge s_axis_aclk)
+  begin
+    if(~s_axis_aresetn)
+    begin
+      int_wr_addr0_reg <= 0;
+      int_wr_addr1_reg <= 1;
+      int_wr_addr2_reg <= 2;
+      int_wr_gray0_reg <= 0;
+      int_wr_gray1_reg <= 1;
+      int_wr_gray2_reg <= 3;
+    end
+    else if(int_wr_enbl_wire)
+    begin
+      bram[int_wr_addr0_wire] <= s_axis_tdata;
+      int_wr_addr0_reg <= int_wr_sum0_wire;
+      int_wr_addr1_reg <= int_wr_sum1_wire;
+      int_wr_addr2_reg <= int_wr_sum2_wire;
+      int_wr_gray0_reg <= {int_wr_sum0_wire[ADDR_WIDTH], int_wr_sum0_wire[ADDR_WIDTH-1:0] ^ int_wr_sum0_wire[ADDR_WIDTH-1:1]};
+      int_wr_gray1_reg <= {int_wr_sum1_wire[ADDR_WIDTH], int_wr_sum1_wire[ADDR_WIDTH-1:0] ^ int_wr_sum1_wire[ADDR_WIDTH-1:1]};
+      int_wr_gray2_reg <= {int_wr_sum2_wire[ADDR_WIDTH], int_wr_sum2_wire[ADDR_WIDTH-1:0] ^ int_wr_sum2_wire[ADDR_WIDTH-1:1]};
+    end
+  end
+
+  cdc #(
+    .DATA_WIDTH(ADDR_WIDTH)
+  ) cdc_rd (
+    .aclk(m_axis_aclk),
+    .aresetn(m_axis_aresetn),
+    .in_data(int_wr_gray0_reg),
+    .out_data(int_wr_gray0_wire)
+  );
+
+  always @(posedge m_axis_aclk)
+  begin
+    if(~m_axis_aresetn)
+    begin
+      int_rd_valid_reg <= 1'b0;
+    end
+    else
+    begin
+      int_rd_valid_reg <= int_rd_valid0_wire & int_rd_valid1_wire;
     end
   end
 
@@ -82,35 +144,28 @@ module axis_fifo_async #
   begin
     if(~m_axis_aresetn)
     begin
-      int_rd_addr_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_rd_gray_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_rd_cdc0_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_rd_cdc1_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_rd_cdc2_reg <= {(ADDR_WIDTH+1){1'b0}};
-      int_rd_cdc3_reg <= {(ADDR_WIDTH+1){1'b0}};
+      int_rd_addr0_reg <= 0;
+      int_rd_addr1_reg <= 1;
+      int_rd_gray0_reg <= 0;
+      int_rd_gray1_reg <= 1;
     end
-    else
+    else if(int_rd_enbl_wire)
     begin
-      if(int_ready_wire & int_valid_wire)
-      begin
-        int_rd_addr_reg <= int_rd_sum_wire;
-        int_rd_gray_reg <= {int_rd_sum_wire[ADDR_WIDTH], int_rd_sum_wire[ADDR_WIDTH-1:0] ^ int_rd_sum_wire[ADDR_WIDTH:1]};
-      end
-      int_rd_cdc0_reg <= int_wr_gray_reg;
-      int_rd_cdc1_reg <= int_rd_cdc0_reg;
-      int_rd_cdc2_reg <= int_rd_cdc1_reg;
-      int_rd_cdc3_reg <= int_rd_cdc2_reg;
+      int_rd_addr0_reg <= int_rd_sum0_wire;
+      int_rd_addr1_reg <= int_rd_sum1_wire;
+      int_rd_gray0_reg <= {int_rd_sum0_wire[ADDR_WIDTH], int_rd_sum0_wire[ADDR_WIDTH-1:0] ^ int_rd_sum0_wire[ADDR_WIDTH-1:1]};
+      int_rd_gray1_reg <= {int_rd_sum1_wire[ADDR_WIDTH], int_rd_sum1_wire[ADDR_WIDTH-1:0] ^ int_rd_sum1_wire[ADDR_WIDTH-1:1]};
     end
   end
-
-  assign int_data_wire = bram[int_rd_addr_reg[ADDR_WIDTH-1:0]];
 
   output_buffer #(
     .DATA_WIDTH(AXIS_TDATA_WIDTH)
   ) buf_0 (
     .aclk(m_axis_aclk), .aresetn(m_axis_aresetn),
-    .in_data(int_data_wire), .in_valid(int_valid_wire), .in_ready(int_ready_wire),
+    .in_data(bram[int_rd_addr0_wire]), .in_valid(int_rd_valid_reg), .in_ready(int_rd_ready_wire),
     .out_data(m_axis_tdata), .out_valid(m_axis_tvalid), .out_ready(m_axis_tready)
   );
+
+  assign s_axis_tready = int_wr_ready_reg;
 
 endmodule
