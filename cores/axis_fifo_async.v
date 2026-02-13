@@ -4,7 +4,8 @@
 module axis_fifo_async #
 (
   parameter integer AXIS_TDATA_WIDTH = 32,
-  parameter integer ADDR_WIDTH = 9
+  parameter integer ADDR_WIDTH = 9,
+  parameter         ALWAYS_READY = "FALSE"
 )
 (
   input  wire                        s_axis_aclk,
@@ -166,6 +167,15 @@ module axis_fifo_async #
     .out_data(m_axis_tdata), .out_valid(m_axis_tvalid), .out_ready(m_axis_tready)
   );
 
-  assign s_axis_tready = int_wr_ready_reg;
+  generate
+    if(ALWAYS_READY == "TRUE")
+    begin : READY_INPUT
+      assign s_axis_tready = 1'b1;
+    end
+    else
+    begin : BLOCKING_INPUT
+      assign s_axis_tready = int_wr_ready_reg;
+    end
+  endgenerate
 
 endmodule
