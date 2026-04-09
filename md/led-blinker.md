@@ -17,7 +17,7 @@ Here is how I set it all up.
 My development machine has the following installed:
 
 - [Debian](https://www.debian.org/releases/bookworm) 12 (amd64)
-- [Vitis Core Development Kit](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vitis.html) 2025.1
+- [Vitis Core Development Kit](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vitis.html) 2025.2
 
 Here are the commands to install all the other required packages:
 
@@ -54,7 +54,7 @@ All steps of the development chain and the corresponding scripts are shown in th
 Setting up the Vitis and Vivado environment:
 
 ```bash
-source /opt/Xilinx/2025.1/Vitis/settings64.sh
+source /opt/Xilinx/2025.2/Vitis/settings64.sh
 ```
 
 Cloning the source code repository:
