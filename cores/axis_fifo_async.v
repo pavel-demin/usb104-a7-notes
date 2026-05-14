@@ -114,9 +114,9 @@ module axis_fifo_async #
       int_wr_addr0_reg <= int_wr_sum0_wire;
       int_wr_addr1_reg <= int_wr_sum1_wire;
       int_wr_addr2_reg <= int_wr_sum2_wire;
-      int_wr_gray0_reg <= {int_wr_sum0_wire[ADDR_WIDTH], int_wr_sum0_wire[ADDR_WIDTH-1:0] ^ int_wr_sum0_wire[ADDR_WIDTH-1:1]};
-      int_wr_gray1_reg <= {int_wr_sum1_wire[ADDR_WIDTH], int_wr_sum1_wire[ADDR_WIDTH-1:0] ^ int_wr_sum1_wire[ADDR_WIDTH-1:1]};
-      int_wr_gray2_reg <= {int_wr_sum2_wire[ADDR_WIDTH], int_wr_sum2_wire[ADDR_WIDTH-1:0] ^ int_wr_sum2_wire[ADDR_WIDTH-1:1]};
+      int_wr_gray0_reg <= int_wr_sum0_wire ^ {1'b0, int_wr_sum0_wire[ADDR_WIDTH-1:1]};
+      int_wr_gray1_reg <= int_wr_sum1_wire ^ {1'b0, int_wr_sum1_wire[ADDR_WIDTH-1:1]};
+      int_wr_gray2_reg <= int_wr_sum2_wire ^ {1'b0, int_wr_sum2_wire[ADDR_WIDTH-1:1]};
     end
   end
 
@@ -154,8 +154,8 @@ module axis_fifo_async #
     begin
       int_rd_addr0_reg <= int_rd_sum0_wire;
       int_rd_addr1_reg <= int_rd_sum1_wire;
-      int_rd_gray0_reg <= {int_rd_sum0_wire[ADDR_WIDTH], int_rd_sum0_wire[ADDR_WIDTH-1:0] ^ int_rd_sum0_wire[ADDR_WIDTH-1:1]};
-      int_rd_gray1_reg <= {int_rd_sum1_wire[ADDR_WIDTH], int_rd_sum1_wire[ADDR_WIDTH-1:0] ^ int_rd_sum1_wire[ADDR_WIDTH-1:1]};
+      int_rd_gray0_reg <= int_rd_sum0_wire ^ {1'b0, int_rd_sum0_wire[ADDR_WIDTH-1:1]};
+      int_rd_gray1_reg <= int_rd_sum1_wire ^ {1'b0, int_rd_sum1_wire[ADDR_WIDTH-1:1]};
     end
   end
 
